@@ -5,8 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 		String filePath = "./bin/doc/weather.nominal.arff";
 		Reader fr = new Reader(filePath);
-		fr.read();
-		fr.displayFile();
+		Instance instance = fr.read();
+		instance.displayFile();
 	}
 
 }

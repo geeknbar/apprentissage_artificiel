@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Reader {
 
 	private String filePath;
+	private Instance instance;
+	
 	private String trainningSetName;
 	private HashMap<String, ArrayList<String>> attributes;
 	private ArrayList<ArrayList<String>> data;
@@ -20,9 +21,10 @@ public class Reader {
 		this.trainningSetName = "";
 		this.attributes = new HashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
+		this.instance = new Instance();
 	}
 
-	public void read() {
+	public Instance read() {
 		try {
 			InputStream ips = new FileInputStream(this.filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
@@ -66,43 +68,14 @@ public class Reader {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
+		this.setInstance();
+		return this.instance;
 	}
-
-	public String getTrainningSetName() {
-		return this.trainningSetName;
-	}
-
-	public void displayFile() {
-		System.out.println("@relation " + this.trainningSetName + "\n");
-		for (Entry<String, ArrayList<String>> entry : this.attributes.entrySet()) {
-			String key = entry.getKey();
-			ArrayList<String> values = entry.getValue();
-			System.out.print("@attribute " + key + " {");
-			boolean first = true;
-			for (String value : values) {
-				if (first) {
-					System.out.print(value);
-					first = false;
-				} else {
-					System.out.print("," + value);
-				}
-			}
-			System.out.print("}\n");
-		}
-		System.out.println("@data");
-		for (ArrayList<String> array : this.data) {
-			int i = 0;
-			for (String value : array) {
-				if (i == array.size()-1) {
-					System.out.print(value);
-					i = 0;
-				} else {
-					System.out.print(value + ",");
-					i++;
-				}
-			}
-			System.out.print("\n");
-		}
+	
+	private void setInstance() {
+		this.instance.setTrainningSetName(this.trainningSetName);
+		this.instance.setAttributes(this.attributes);
+		this.instance.setData(this.data);
 	}
 
 }
