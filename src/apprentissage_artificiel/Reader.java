@@ -15,12 +15,14 @@ public class Reader {
 	private String trainningSetName;
 	private HashMap<String, ArrayList<String>> attributes;
 	private ArrayList<ArrayList<String>> data;
-
+	private int numberOfRows;
+	
 	public Reader(String filePath) {
 		this.filePath = filePath;
 		this.trainningSetName = "";
 		this.attributes = new HashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
+		this.numberOfRows = 0;
 		this.instance = new Instance();
 	}
 
@@ -55,6 +57,7 @@ public class Reader {
 					if ("@data".equals(line.split(" ", 3)[0])) {
 						isData = true;
 					} else if (isData) {
+						numberOfRows++;
 						ArrayList<String> columns = new ArrayList<String>();
 						for (String column : line.split(",")) {
 							columns.add(column);
@@ -76,6 +79,7 @@ public class Reader {
 		this.instance.setTrainningSetName(this.trainningSetName);
 		this.instance.setAttributes(this.attributes);
 		this.instance.setData(this.data);
+		this.instance.setNumberOfRows(this.numberOfRows);
 	}
 
 }

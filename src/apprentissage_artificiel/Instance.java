@@ -6,14 +6,20 @@ import java.util.Map.Entry;
 
 public class Instance {
 	
+	// Nom du jeu de données
 	private String trainningSetName;
+	// Stockage des attributs et des valeurs possibles
 	private HashMap<String, ArrayList<String>> attributes;
+	// Stockage des lignes d'exemples
 	private ArrayList<ArrayList<String>> data;
+	// Nombre de lignes d'exemple
+	private int numberOfRows;
 	
 	public Instance() {
 		this.trainningSetName = "";
 		this.attributes = new HashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
+		this.numberOfRows = 0;
 	}
 	
 	public void displayFile() {
@@ -61,6 +67,10 @@ public class Instance {
 		this.data = data;
 	}
 	
+	public void setNumberOfRows(int numberOfRows) {
+		this.numberOfRows = numberOfRows;
+	}
+	
 	public String getTrainningSetName() {
 		return this.trainningSetName;
 	}
@@ -71,5 +81,9 @@ public class Instance {
 	
 	public ArrayList<ArrayList<String>> getData() {
 		return this.data;
+	}
+	
+	public int getNumberOfRows() {
+		return this.numberOfRows;
 	}
 }

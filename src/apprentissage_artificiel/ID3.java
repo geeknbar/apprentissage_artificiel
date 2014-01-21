@@ -6,68 +6,70 @@ import java.util.Map.Entry;
 
 public class ID3 {
 
+	// Instance 
 	Instance instance;
+	// Entropie de l'ensemble S
+	double entropyS;
 
 	public ID3(Instance instance) {
 		this.instance = instance;
+		this.entropyS = 0;
 	}
 
-	public void choice() {
-		int nbExamples = 0;
-		double entropyS = 0;
+	public void compute() {
 
-		// Calcul du nombre de classes
-		HashMap<String, Integer> numberOfClasses = new HashMap<String, Integer>();
+		// Calcul du nombre d'exemples pour chaque classe
+		HashMap<String, Integer> examplesPerClass = new HashMap<String, Integer>();
 		for (ArrayList<String> array : this.instance.getData()) {
-			nbExamples++;
-			if (!numberOfClasses.containsKey(array.get(array.size() - 1))) {
-				numberOfClasses.put(array.get(array.size() - 1), 1);
+			if (!examplesPerClass.containsKey(array.get(array.size() - 1))) {
+				examplesPerClass.put(array.get(array.size() - 1), 1);
 			} else {
-				Integer temp = numberOfClasses.get(array.get(array.size() - 1));
+				Integer temp = examplesPerClass.get(array.get(array.size() - 1));
 				temp++;
-				numberOfClasses.put(array.get(array.size() - 1), temp);
+				examplesPerClass.put(array.get(array.size() - 1), temp);
 			}
 		}
 
-		// Calcul de l'entropie de l'ensemble S (entropyS)
+		// Calcul de l'entropie de l'ensemble S
 		ArrayList<Integer> values = new ArrayList<Integer>();
-		for (Entry<String, Integer> entry : numberOfClasses.entrySet()) {
+		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
 			values.add(entry.getValue());
 		}
-		entropyS = calculateEntropy(nbExamples, values);
+		this.entropyS = calculateEntropy(this.instance.getNumberOfRows(), values);
 
 		// Affichage temporaire
-		System.out.println(numberOfClasses.toString());
-		System.out.println("Entropie de S : " + entropyS);
+		System.out.println(examplesPerClass.toString());
+		System.out.println("Entropie de S : " + this.entropyS);
 
-		HashMap<String, HashMap<String, Integer>> numberOfOcc = new HashMap<String, HashMap<String, Integer>>();
+		// Calcul du gain pour l'attribut 0
+		HashMap<String, HashMap<String, Integer>> examplesPerClassPerAttributs = new HashMap<String, HashMap<String, Integer>>();
 		for (ArrayList<String> array : this.instance.getData()) {
-			if (!numberOfOcc.containsKey(array.get(0))) {
+			int sizeArray = array.size() - 1;
+			if (!examplesPerClassPerAttributs.containsKey(array.get(0))) {
 				HashMap<String, Integer> newEntry = new HashMap<String, Integer>();
-				newEntry.put(array.get(array.size() - 1), 1);
-				numberOfOcc.put(array.get(0), newEntry);
+				newEntry.put(array.get(sizeArray), 1);
+				examplesPerClassPerAttributs.put(array.get(0), newEntry);
 			} else {
-				HashMap<String, Integer> test = numberOfOcc.get(array.get(0));
-				if (!test.containsKey(array.get(array.size() - 1))) {
-					test.put(array.get(array.size() - 1), 1);
+				HashMap<String, Integer> test = examplesPerClassPerAttributs.get(array.get(0));
+				if (!test.containsKey(array.get(sizeArray))) {
+					test.put(array.get(sizeArray), 1);
 				} else {
-					int toModify = test.get(array.get(array.size() - 1));
+					int toModify = test.get(array.get(sizeArray));
 					toModify++;
-					test.put(array.get(array.size() - 1), toModify);
-					numberOfOcc.put(array.get(0), test);
+					test.put(array.get(sizeArray), toModify);
+					examplesPerClassPerAttributs.put(array.get(0), test);
 				}
 			}
 		}
-		
-		double gain = entropyS;
-		for (Entry<String, HashMap<String, Integer>> entry : numberOfOcc.entrySet()) {
+		double gain = this.entropyS;
+		for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs.entrySet()) {
 			ArrayList<Integer> val = new ArrayList<Integer>();
 			int ratio = 0;
 			for (Entry<String, Integer> value : entry.getValue().entrySet()) {
 				ratio += value.getValue();
 				val.add(value.getValue());
 			}
-			gain -= ((double)ratio / (double)nbExamples) * calculateEntropy(ratio, val);
+			gain -= ((double)ratio / (double)this.instance.getNumberOfRows()) * calculateEntropy(ratio, val);
 			val.clear();
 		}
 

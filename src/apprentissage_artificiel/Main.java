@@ -8,7 +8,7 @@ public class Main {
 		Instance instance = fr.read();
 		//instance.displayFile();
 		ID3 id3 = new ID3(instance);
-		id3.choice();
+		id3.compute();
 	}
 
 }
