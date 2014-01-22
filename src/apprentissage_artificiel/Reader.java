@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Reader {
 
@@ -13,14 +13,14 @@ public class Reader {
 	private Instance instance;
 	
 	private String trainningSetName;
-	private HashMap<String, ArrayList<String>> attributes;
+	private LinkedHashMap<String, ArrayList<String>> attributes;
 	private ArrayList<ArrayList<String>> data;
 	private int numberOfRows;
 	
 	public Reader(String filePath) {
 		this.filePath = filePath;
 		this.trainningSetName = "";
-		this.attributes = new HashMap<String, ArrayList<String>>();
+		this.attributes = new LinkedHashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
 		this.numberOfRows = 0;
 		this.instance = new Instance();

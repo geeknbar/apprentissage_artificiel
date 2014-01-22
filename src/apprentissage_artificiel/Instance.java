@@ -1,7 +1,7 @@
 package apprentissage_artificiel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 public class Instance {
@@ -9,7 +9,7 @@ public class Instance {
 	// Nom du jeu de données
 	private String trainningSetName;
 	// Stockage des attributs et des valeurs possibles
-	private HashMap<String, ArrayList<String>> attributes;
+	private LinkedHashMap<String, ArrayList<String>> attributes;
 	// Stockage des lignes d'exemples
 	private ArrayList<ArrayList<String>> data;
 	// Nombre de lignes d'exemple
@@ -17,7 +17,7 @@ public class Instance {
 	
 	public Instance() {
 		this.trainningSetName = "";
-		this.attributes = new HashMap<String, ArrayList<String>>();
+		this.attributes = new LinkedHashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
 		this.numberOfRows = 0;
 	}
@@ -59,7 +59,7 @@ public class Instance {
 		this.trainningSetName = trainningSetName;
 	}
 	
-	public void setAttributes(HashMap<String, ArrayList<String>> attributes) {
+	public void setAttributes(LinkedHashMap<String, ArrayList<String>> attributes) {
 		this.attributes = attributes;
 	}
 	
@@ -75,7 +75,7 @@ public class Instance {
 		return this.trainningSetName;
 	}
 	
-	public HashMap<String, ArrayList<String>> getAttributes() {
+	public LinkedHashMap<String, ArrayList<String>> getAttributes() {
 		return this.attributes;
 	}
 	
