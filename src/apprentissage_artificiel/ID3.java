@@ -40,7 +40,7 @@ public class ID3 {
 		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
 			values.add(entry.getValue());
 		}
-		this.entropyS = calculateEntropy(this.instance.getNumberOfRows(), values);
+		this.entropyS = calculateEntropy(this.instance.getNumberOfDataRows(), values);
 
 		// Affichage temporaire
 		System.out.println(examplesPerClass.toString());
@@ -77,7 +77,7 @@ public class ID3 {
 					ratio += value.getValue();
 					val.add(value.getValue());
 				}
-				gain -= ((double)ratio / (double)this.instance.getNumberOfRows()) * calculateEntropy(ratio, val);
+				gain -= ((double)ratio / (double)this.instance.getNumberOfDataRows()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
 			// Affichage temporaire

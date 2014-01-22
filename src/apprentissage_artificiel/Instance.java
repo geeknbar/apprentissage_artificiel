@@ -6,20 +6,20 @@ import java.util.Map.Entry;
 
 public class Instance {
 	
-	// Nom du jeu de données
+	// Nom du jeu de donnï¿½es
 	private String trainningSetName;
 	// Stockage des attributs et des valeurs possibles
 	private LinkedHashMap<String, ArrayList<String>> attributes;
 	// Stockage des lignes d'exemples
 	private ArrayList<ArrayList<String>> data;
 	// Nombre de lignes d'exemple
-	private int numberOfRows;
+	private int numberOfDataRows;
 	
 	public Instance() {
 		this.trainningSetName = "";
 		this.attributes = new LinkedHashMap<String, ArrayList<String>>();
 		this.data = new ArrayList<ArrayList<String>>();
-		this.numberOfRows = 0;
+		this.numberOfDataRows = 0;
 	}
 	
 	public void displayFile() {
@@ -67,8 +67,8 @@ public class Instance {
 		this.data = data;
 	}
 	
-	public void setNumberOfRows(int numberOfRows) {
-		this.numberOfRows = numberOfRows;
+	public void setNumberOfDataRows(int numberOfRows) {
+		this.numberOfDataRows = numberOfRows;
 	}
 	
 	public String getTrainningSetName() {
@@ -83,7 +83,7 @@ public class Instance {
 		return this.data;
 	}
 	
-	public int getNumberOfRows() {
-		return this.numberOfRows;
+	public int getNumberOfDataRows() {
+		return this.numberOfDataRows;
 	}
 }
