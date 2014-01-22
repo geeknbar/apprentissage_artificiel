@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public class Instance {
 	
-	// Nom du jeu de donn�es
+	// Nom du jeu de donnees
 	private String trainningSetName;
 	// Stockage des attributs et des valeurs possibles
 	private LinkedHashMap<String, ArrayList<String>> attributes;

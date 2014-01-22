@@ -32,8 +32,7 @@ public class ID3 {
 			if (!examplesPerClass.containsKey(array.get(array.size() - 1))) {
 				examplesPerClass.put(array.get(array.size() - 1), 1);
 			} else {
-				Integer temp = examplesPerClass
-						.get(array.get(array.size() - 1));
+				Integer temp = examplesPerClass.get(array.get(array.size() - 1));
 				temp++;
 				examplesPerClass.put(array.get(array.size() - 1), temp);
 			}
@@ -44,8 +43,7 @@ public class ID3 {
 		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
 			values.add(entry.getValue());
 		}
-		this.entropyS = calculateEntropy(this.instance.getNumberOfDataRows(),
-				values);
+		this.entropyS = calculateEntropy(this.instance.getNumberOfDataRows(),values);
 
 		// Affichage temporaire
 		System.out.println(examplesPerClass.toString());
@@ -63,8 +61,7 @@ public class ID3 {
 					newEntry.put(array.get(sizeArray), 1);
 					examplesPerClassPerAttributs.put(array.get(i), newEntry);
 				} else {
-					HashMap<String, Integer> test = examplesPerClassPerAttributs
-							.get(array.get(i));
+					HashMap<String, Integer> test = examplesPerClassPerAttributs.get(array.get(i));
 					if (!test.containsKey(array.get(sizeArray))) {
 						test.put(array.get(sizeArray), 1);
 					} else {
@@ -76,23 +73,20 @@ public class ID3 {
 				}
 			}
 			double gain = this.entropyS;
-			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs
-					.entrySet()) {
+			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs.entrySet()) {
 				ArrayList<Integer> val = new ArrayList<Integer>();
 				int ratio = 0;
 				for (Entry<String, Integer> value : entry.getValue().entrySet()) {
 					ratio += value.getValue();
 					val.add(value.getValue());
 				}
-				gain -= ((double) ratio / (double) this.instance
-						.getNumberOfDataRows()) * calculateEntropy(ratio, val);
+				gain -= ((double) ratio / (double) this.instance.getNumberOfDataRows()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
 			// Affichage temporaire
 			System.out.println("Gain : " + gain);
 			if (gain > Double.valueOf(topGain[1])) {
-				topGain[0] = this.instance.getAttributes().keySet().toArray()[i]
-						.toString();
+				topGain[0] = this.instance.getAttributes().keySet().toArray()[i].toString();
 				topGain[1] = String.valueOf(gain);
 			}
 		}
