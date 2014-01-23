@@ -83,14 +83,14 @@ public class ID3 {
 				gain -= ((double) ratio / (double) this.instance.getNumberOfDataRows()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
-			// Affichage temporaire
+			// Affichage temporaire de chaque gain
 			System.out.println("Gain : " + gain);
 			if (gain > Double.valueOf(topGain[1])) {
 				topGain[0] = this.instance.getAttributes().keySet().toArray()[i].toString();
 				topGain[1] = String.valueOf(gain);
 			}
 		}
-		// Affichage temporaire
+		// Affichage temporaire du meilleur noeud trouve
 		System.out.println("Gain : " + topGain[0] + " : " + topGain[1]);
 	}
 
