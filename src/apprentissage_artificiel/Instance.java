@@ -8,8 +8,8 @@ public class Instance {
 	private InstanceClass instanceClass;
 	
 	public Instance() {
-		this.setAttributes(new ArrayList<Attribute>());
-		this.setInstanceClass(new InstanceClass());
+		this.attributes = new ArrayList<Attribute>();
+		this.instanceClass = null;
 	}
 
 	public ArrayList<Attribute> getAttributes() {
@@ -20,6 +20,10 @@ public class Instance {
 		this.attributes = attributes;
 	}
 
+	public void addAttribute(Attribute attribute) {
+		this.attributes.add(attribute);
+	}
+	
 	public InstanceClass getInstanceClass() {
 		return instanceClass;
 	}
@@ -27,7 +31,5 @@ public class Instance {
 	public void setInstanceClass(InstanceClass instanceClass) {
 		this.instanceClass = instanceClass;
 	}
-	
-	
 	
 }

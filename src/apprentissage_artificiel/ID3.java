@@ -1,11 +1,11 @@
 package apprentissage_artificiel;
-
+/*
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
+*/
 public class ID3 {
-
+/*
 	// Instance
 	private Instance instance;
 	// Entropie de l'ensemble S
@@ -110,5 +110,5 @@ public class ID3 {
 	private double logb(double a, double b) {
 		return Math.log(a) / Math.log(b);
 	}
-
+*/
 }

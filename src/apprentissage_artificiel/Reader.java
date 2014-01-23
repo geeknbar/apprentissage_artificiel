@@ -5,43 +5,42 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class Reader {
 
+	public final static String INIT = "";
+	
+	public final static String RELATION = "@relation";
+	public final static String ATTRIBUTE = "@attribute";
+	public final static String DATA = "@data";
+	
 	private String filePath;
-	private Instance instance;
+	private Instances instances;
 	
-	private String trainningSetName;
-	private LinkedHashMap<String, ArrayList<String>> attributes;
-	private ArrayList<ArrayList<String>> data;
-	private int numberOfDataRows;
-	
-	public Reader(String filePath) {
+	public Reader(String filePath, Instances instances) {
 		this.filePath = filePath;
-		this.trainningSetName = "";
-		this.attributes = new LinkedHashMap<String, ArrayList<String>>();
-		this.data = new ArrayList<ArrayList<String>>();
-		this.numberOfDataRows = 0;
-		this.instance = new Instance();
+		this.instances = instances;
 	}
 
-	public Instance read() {
+	public void read() {
 		try {
 			InputStream ips = new FileInputStream(this.filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
-			String line;
+			
+			String line = INIT;
 			boolean isData = false;
+			
 			while ((line = br.readLine()) != null) {
 				if (!line.isEmpty()) {
-					if ("@relation".equals(line.split(" ", 3)[0])) {
-						this.trainningSetName = line.split(" ", 3)[1];
+					String lineSplit[] = line.split(" ", 3);
+					if (lineSplit[0].equals(RELATION)) {
+						this.instances.setRelationName(lineSplit[1]);
 					}
 
-					if ("@attribute".equals(line.split(" ", 3)[0])) {
-						String attribute = line.split(" ", 3)[1];
-						String values = line.split(" ", 3)[2];
+					if (lineSplit[0].equals(ATTRIBUTE)) {
+						String name = lineSplit[1];
+						String values = lineSplit[2];
 						
 						values = values.replaceAll(" ", "");
 						values = values.replaceAll("\\{", "");
@@ -51,18 +50,21 @@ public class Reader {
 						for (String value : values.split(",")) {
 							possibleValues.add(value);
 						}
-						this.attributes.put(attribute, possibleValues);
+						this.instances.addAttribute(name, possibleValues);
 					}
 
-					if ("@data".equals(line.split(" ", 3)[0])) {
+					if (lineSplit[0].equals(DATA)) {
 						isData = true;
 					} else if (isData) {
-						numberOfDataRows++;
-						ArrayList<String> columns = new ArrayList<String>();
-						for (String column : line.split(",")) {
-							columns.add(column);
+						this.instances.incNumberOfDataRows();
+						Instance newInstance = new Instance();
+						
+						String attributes[] = line.split(",");
+						for (int i = 0; i < attributes.length - 1; i++) {
+							newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i]));
 						}
-						this.data.add(columns);
+						newInstance.setInstanceClass(new InstanceClass(attributes[attributes.length - 1]));
+						this.instances.addInstance(newInstance);
 					}
 				}
 
@@ -71,15 +73,5 @@ public class Reader {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		this.setInstance();
-		return this.instance;
 	}
-	
-	private void setInstance() {
-		this.instance.setTrainningSetName(this.trainningSetName);
-		this.instance.setAttributes(this.attributes);
-		this.instance.setData(this.data);
-		this.instance.setNumberOfDataRows(this.numberOfDataRows);
-	}
-
 }

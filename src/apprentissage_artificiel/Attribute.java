@@ -7,9 +7,9 @@ public class Attribute {
 	private String name;
 	private String value;
 	
-	public Attribute() {
-		this.name = INIT;
-		this.value = INIT;
+	public Attribute(String name, String value) {
+		this.name = name;
+		this.value = value;
 	}
 	
 	public void setName(String name) {

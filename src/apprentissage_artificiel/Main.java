@@ -4,11 +4,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		String filePath = "./bin/doc/weather.nominal.arff";
-		Reader fr = new Reader(filePath);
-		Instance instance = fr.read();
+		Instances instances = new Instances();
+		instances.loadFile(filePath);
 		//instance.displayFile();
-		ID3 id3 = new ID3(instance);
-		id3.compute();
+		//ID3 id3 = new ID3(instance);
+		//id3.compute();
+		//instances.displayInstances();
 	}
 
 }
