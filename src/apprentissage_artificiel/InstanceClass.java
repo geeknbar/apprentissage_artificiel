@@ -1,13 +1,13 @@
 package apprentissage_artificiel;
 
-public class Attribute {
+public class InstanceClass {
 
 	public final static String INIT = "";
 	
 	private String name;
 	private String value;
 	
-	public Attribute() {
+	public InstanceClass() {
 		this.name = INIT;
 		this.value = INIT;
 	}
