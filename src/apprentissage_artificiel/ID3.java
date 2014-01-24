@@ -1,9 +1,7 @@
 package apprentissage_artificiel;
-/*
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-*/
+
 public class ID3 {
 /*
 	// Instance
@@ -93,7 +91,26 @@ public class ID3 {
 		// Affichage temporaire du meilleur noeud trouve
 		System.out.println("Gain : " + topGain[0] + " : " + topGain[1]);
 	}
-
+*/
+	
+	private Instances instances;
+	
+	public ID3(Instances instances) {
+		this.instances = instances;
+	}
+	
+	/**
+	 * 
+	 * @param instances exemples
+	 * @param instanceClass attributCible
+	 * @param attributes attributsNonCibles
+	 */
+	public void recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
+		if (attributes.size() == 0) {
+			
+		}
+	}
+	
 	private double calculateEntropy(int nbExamples, ArrayList<Integer> values) {
 		double entropy = 0;
 		for (Integer value : values) {
@@ -110,5 +127,5 @@ public class ID3 {
 	private double logb(double a, double b) {
 		return Math.log(a) / Math.log(b);
 	}
-*/
+
 }
