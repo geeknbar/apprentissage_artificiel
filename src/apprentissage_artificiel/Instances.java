@@ -68,7 +68,6 @@ public class Instances {
 		this.numberOfDataRows++;
 	}
 	
-	/*
 	public void displayInstances() {
 		System.out.println("Relation Name = " + relationName);
 		
@@ -84,5 +83,4 @@ public class Instances {
 		System.out.println("Number of data rows : " + numberOfDataRows);
 		
 	}
-	*/
 }
