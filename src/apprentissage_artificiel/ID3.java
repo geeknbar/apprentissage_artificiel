@@ -3,69 +3,12 @@ package apprentissage_artificiel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
-public class ID3 {
-	/*
-	 * // Instance private Instance instance; // Entropie de l'ensemble S
-	 * private double entropyS; // Meilleur gain temporaire private String
-	 * topGain[];
-	 * 
-	 * public ID3(Instance instance) { this.instance = instance; this.entropyS =
-	 * 0; this.topGain = new String[2]; this.topGain[0] = ""; this.topGain[1] =
-	 * "0.0"; }
-	 * 
-	 * public void compute() { searchRoot(); }
-	 * 
-	 * private void searchRoot() { // Calcul du nombre d'exemples pour chaque
-	 * classe HashMap<String, Integer> examplesPerClass = new HashMap<String,
-	 * Integer>(); for (ArrayList<String> array : this.instance.getData()) { if
-	 * (!examplesPerClass.containsKey(array.get(array.size() - 1))) {
-	 * examplesPerClass.put(array.get(array.size() - 1), 1); } else { Integer
-	 * temp = examplesPerClass.get(array.get(array.size() - 1)); temp++;
-	 * examplesPerClass.put(array.get(array.size() - 1), temp); } }
-	 * 
-	 * // Calcul de l'entropie de l'ensemble S ArrayList<Integer> values = new
-	 * ArrayList<Integer>(); for (Entry<String, Integer> entry :
-	 * examplesPerClass.entrySet()) { values.add(entry.getValue()); }
-	 * this.entropyS =
-	 * calculateEntropy(this.instance.getNumberOfDataRows(),values);
-	 * 
-	 * // Affichage temporaire System.out.println(examplesPerClass.toString());
-	 * System.out.println("Entropie de S : " + this.entropyS);
-	 * System.out.println(this.instance.getAttributes().toString());
-	 * 
-	 * // Calcul du gain pour l'attribut 0 for (int i = 0; i <
-	 * this.instance.getAttributes().size() - 1; i++) { HashMap<String,
-	 * HashMap<String, Integer>> examplesPerClassPerAttributs = new
-	 * HashMap<String, HashMap<String, Integer>>(); int sizeArray = 0; for
-	 * (ArrayList<String> array : this.instance.getData()) { sizeArray =
-	 * array.size() - 1; if
-	 * (!examplesPerClassPerAttributs.containsKey(array.get(i))) {
-	 * HashMap<String, Integer> newEntry = new HashMap<String, Integer>();
-	 * newEntry.put(array.get(sizeArray), 1);
-	 * examplesPerClassPerAttributs.put(array.get(i), newEntry); } else {
-	 * HashMap<String, Integer> test =
-	 * examplesPerClassPerAttributs.get(array.get(i)); if
-	 * (!test.containsKey(array.get(sizeArray))) {
-	 * test.put(array.get(sizeArray), 1); } else { int toModify =
-	 * test.get(array.get(sizeArray)); toModify++;
-	 * test.put(array.get(sizeArray), toModify);
-	 * examplesPerClassPerAttributs.put(array.get(i), test); } } } double gain =
-	 * this.entropyS; for (Entry<String, HashMap<String, Integer>> entry :
-	 * examplesPerClassPerAttributs.entrySet()) { ArrayList<Integer> val = new
-	 * ArrayList<Integer>(); int ratio = 0; for (Entry<String, Integer> value :
-	 * entry.getValue().entrySet()) { ratio += value.getValue();
-	 * val.add(value.getValue()); } gain -= ((double) ratio / (double)
-	 * this.instance.getNumberOfDataRows()) * calculateEntropy(ratio, val);
-	 * val.clear(); } // Affichage temporaire de chaque gain
-	 * System.out.println("Gain : " + gain); if (gain >
-	 * Double.valueOf(topGain[1])) { topGain[0] =
-	 * this.instance.getAttributes().keySet().toArray()[i].toString();
-	 * topGain[1] = String.valueOf(gain); } } // Affichage temporaire du
-	 * meilleur noeud trouve System.out.println("Gain : " + topGain[0] + " : " +
-	 * topGain[1]); }
-	 */
+public class ID3 {	 
 
+	public final static String INIT = "";
+	
 	private Instances instances;
 
 	public ID3(Instances instances) {
@@ -94,25 +37,49 @@ public class ID3 {
 				instanceClassValues.add(instance.getInstanceClass().getValue());
 			}
 			if (instanceClassValues.size() == 1) {
-				// retourner un nœud ayant cette valeur
+				// retourner un noeud ayant cette valeur
 			} else {
-				Attribute selectedAttribute = bestAttribute(instances,
-						attributes);
+				Attribute selectedAttribute = bestAttribute(instances, attributes);
 			}
 		}
 
 	}
 
-	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {
+	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {	
+		
+		String topGain[];
+		topGain = new String[2];
+		topGain[0] = INIT;
+		topGain[1] = "0.0";
+		
+		HashMap<String, Integer> examplesPerClass = new HashMap<String, Integer>();
+		for (Instance instance : this.instances.getInstances()) {
+			String value = instance.getInstanceClass().getValue();
+			if (!examplesPerClass.containsKey(value)) {
+				examplesPerClass.put(value, 1);
+			} else {
+				Integer temp = examplesPerClass.get(value);
+				temp++;
+				examplesPerClass.put(value, temp);
+			}
+		}
+
+		// Calcul de l'entropie de l'instances
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
+			values.add(entry.getValue());
+		}
+		double entropyS = calculateEntropy(this.instances.getNumberOfDataRows(),values);
+		
 		for (Integer i : attributes) {
 			HashMap<String, HashMap<String, Integer>> examplesPerClassPerAttributs = new HashMap<String, HashMap<String, Integer>>();
 			for (Instance instance : instances.getInstances()) {
-				if (!examplesPerClassPerAttributs.containsKey(instance.getAttributes().get(i))) {
+				if (!examplesPerClassPerAttributs.containsKey(instance.getAttributes().get(i).getValue())) {
 					HashMap<String, Integer> newEntry = new HashMap<String, Integer>();
 					newEntry.put(instance.getInstanceClass().getValue(), 1);
 					examplesPerClassPerAttributs.put(instance.getAttributes().get(i).getValue(), newEntry);
 				} else {
-					HashMap<String, Integer> test = examplesPerClassPerAttributs.get(instance.getAttributes().get(i));
+					HashMap<String, Integer> test = examplesPerClassPerAttributs.get(instance.getAttributes().get(i).getValue());
 					if (!test.containsKey(instance.getInstanceClass().getValue())) {
 						test.put(instance.getInstanceClass().getValue(), 1);
 					} else {
@@ -123,28 +90,28 @@ public class ID3 {
 					}
 				}
 			}
-			System.out.println(examplesPerClassPerAttributs.toString());
-			/*double gain = this.entropyS;
-			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs
-					.entrySet()) {
+			System.out.println(examplesPerClassPerAttributs.toString() + "\t*** FIN ***");
+			double gain = entropyS;
+			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs.entrySet()) {
 				ArrayList<Integer> val = new ArrayList<Integer>();
 				int ratio = 0;
 				for (Entry<String, Integer> value : entry.getValue().entrySet()) {
 					ratio += value.getValue();
 					val.add(value.getValue());
 				}
-				gain -= ((double) ratio / (double) this.instance.getNumberOfDataRows()) * calculateEntropy(ratio, val);
+				gain -= ((double) ratio / (double) instances.getNumberOfDataRows()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
 			// Affichage temporaire de chaque gain
 			System.out.println("Gain : " + gain);
 			if (gain > Double.valueOf(topGain[1])) {
-				topGain[0] = this.instance.getAttributes().keySet().toArray()[i]
-						.toString();
+				topGain[0] = this.instances.getAttributes().keySet().toArray()[i].toString();
 				topGain[1] = String.valueOf(gain);
-			}*/
+			}
 		}
-
+		
+		System.out.println(topGain[0] + " " + topGain[1]);
+		
 		return null;
 	}
 
