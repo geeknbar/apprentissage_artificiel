@@ -1,6 +1,7 @@
 package apprentissage_artificiel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ID3 {
 /*
@@ -106,9 +107,27 @@ public class ID3 {
 	 * @param attributes attributsNonCibles
 	 */
 	public void recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
-		if (attributes.size() == 0) {
-			
+		if (instances.getInstances().size() == 0) { /* Nœud terminal */
+			// retourner un nœud Erreur
+		} else if (attributes.size() == 0) { /* Nœud terminal */
+			// retourner un nœud ayant la valeur la plus représentée pour attributCible
+		} else {
+			HashSet<String> instanceClassValues = new HashSet<String>();
+			for (Instance instance : instances.getInstances()) {
+				instanceClassValues.add(instance.getInstanceClass().getValue());
+			}
+			if (instanceClassValues.size() == 1) {
+				// retourner un nœud ayant cette valeur
+			} else {
+				Attribute selectedAttribute = bestAttribute(instances, attributes);
+			}
 		}
+		
+	}
+	
+	private Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {
+		
+		return null;
 	}
 	
 	private double calculateEntropy(int nbExamples, ArrayList<Integer> values) {
