@@ -2,6 +2,7 @@
 
 @attribute days {monday, tuesday, wednesday, thursday, friday, saturday, sunday}
 @attribute holidays {yes, no}
+@attribute work {yes, no}
 
 @data
 monday,no,yes
