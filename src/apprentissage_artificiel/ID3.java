@@ -9,6 +9,10 @@ public class ID3 {
 
 	public final static String INIT = "";
 
+	private Attribute attribute;
+	private ArrayList<Attribute> sons;
+	private ArrayList<String> leafs;
+	
 	public ID3() {
 		
 	}
