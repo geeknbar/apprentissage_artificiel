@@ -1,7 +1,6 @@
 package apprentissage_artificiel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -118,7 +117,7 @@ public class ID3 {
 			if (gain > Double.valueOf(topGain[1])) {
 				topGain[0] = this.instances.getAttributes().keySet().toArray()[i].toString();
 				topGain[1] = String.valueOf(gain);
-				topAttribute = new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), INIT);
+				topAttribute = instances.getInstances().get(0).getAttributes().get(i);
 			}
 		}
 		
