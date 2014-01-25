@@ -1,6 +1,7 @@
 package apprentissage_artificiel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -24,8 +25,7 @@ public class ID3 {
 	 * @param attributes
 	 *            attributsNonCibles
 	 */
-	public void recursive(Instances instances, InstanceClass instanceClass,
-			ArrayList<Integer> attributes) {
+	public void recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			// retourner un nœud Erreur
 		} else if (attributes.size() == 0) { /* Nœud terminal */
@@ -40,6 +40,16 @@ public class ID3 {
 				// retourner un noeud ayant cette valeur
 			} else {
 				Attribute selectedAttribute = bestAttribute(instances, attributes);
+				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
+				System.out.println("attributes " + attributes.toString());
+				System.out.println("remainingAttributes " + remainingAttributes.toString());
+				int indexToDelete = 0;
+				while (!selectedAttribute.getName().equals(instances.getAttributes().keySet().toArray()[indexToDelete].toString())) {
+					indexToDelete++;
+				}
+				remainingAttributes.remove(indexToDelete);
+				System.out.println("attributes " + attributes.toString());
+				System.out.println("remainingAttributes " + remainingAttributes.toString());
 			}
 		}
 
@@ -51,6 +61,7 @@ public class ID3 {
 		topGain = new String[2];
 		topGain[0] = INIT;
 		topGain[1] = "0.0";
+		Attribute topAttribute = null;
 		
 		HashMap<String, Integer> examplesPerClass = new HashMap<String, Integer>();
 		for (Instance instance : this.instances.getInstances()) {
@@ -70,7 +81,7 @@ public class ID3 {
 			values.add(entry.getValue());
 		}
 		double entropyS = calculateEntropy(this.instances.getNumberOfDataRows(),values);
-		
+		 
 		for (Integer i : attributes) {
 			HashMap<String, HashMap<String, Integer>> examplesPerClassPerAttributs = new HashMap<String, HashMap<String, Integer>>();
 			for (Instance instance : instances.getInstances()) {
@@ -107,12 +118,13 @@ public class ID3 {
 			if (gain > Double.valueOf(topGain[1])) {
 				topGain[0] = this.instances.getAttributes().keySet().toArray()[i].toString();
 				topGain[1] = String.valueOf(gain);
+				topAttribute = new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), INIT);
 			}
 		}
 		
-		System.out.println(topGain[0] + " " + topGain[1]);
+		//System.out.println(topGain[0] + " " + topGain[1]);
 		
-		return null;
+		return topAttribute;
 	}
 
 	private double calculateEntropy(int nbExamples, ArrayList<Integer> values) {
