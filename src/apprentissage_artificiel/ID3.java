@@ -52,10 +52,7 @@ public class ID3 {
 
 	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {	
 		
-		String topGain[];
-		topGain = new String[2];
-		topGain[0] = INIT;
-		topGain[1] = "0.0";
+		double topGain = 0;
 		Attribute topAttribute = null;
 		
 		HashMap<String, Integer> examplesPerClass = new HashMap<String, Integer>();
@@ -112,9 +109,8 @@ public class ID3 {
 			}
 			// Affichage temporaire de chaque gain
 			System.out.println("Gain : " + gain);
-			if (gain > Double.valueOf(topGain[1])) {
-				topGain[0] = this.instances.getAttributes().keySet().toArray()[i].toString();
-				topGain[1] = String.valueOf(gain);
+			if (gain > topGain) {
+				topGain = gain;
 				topAttribute = instances.getInstances().get(0).getAttributes().get(i);
 			}
 		}
