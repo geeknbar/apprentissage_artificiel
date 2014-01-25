@@ -8,11 +8,9 @@ import java.util.Map.Entry;
 public class ID3 {	 
 
 	public final static String INIT = "";
-	
-	private Instances instances;
 
-	public ID3(Instances instances) {
-		this.instances = instances;
+	public ID3() {
+		
 	}
 
 	/**
@@ -45,6 +43,7 @@ public class ID3 {
 				remainingAttributes.remove(selectedAttribute.getIndex());
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
+				
 			}
 		}
 
@@ -56,7 +55,7 @@ public class ID3 {
 		Attribute topAttribute = null;
 		
 		HashMap<String, Integer> examplesPerClass = new HashMap<String, Integer>();
-		for (Instance instance : this.instances.getInstances()) {
+		for (Instance instance : instances.getInstances()) {
 			String value = instance.getInstanceClass().getValue();
 			if (!examplesPerClass.containsKey(value)) {
 				examplesPerClass.put(value, 1);
