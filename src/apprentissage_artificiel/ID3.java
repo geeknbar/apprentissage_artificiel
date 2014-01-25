@@ -40,15 +40,11 @@ public class ID3 {
 			} else {
 				Attribute selectedAttribute = bestAttribute(instances, attributes);
 				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
-				System.out.println("attributes " + attributes.toString());
-				System.out.println("remainingAttributes " + remainingAttributes.toString());
-				int indexToDelete = 0;
-				while (!selectedAttribute.getName().equals(instances.getAttributes().keySet().toArray()[indexToDelete].toString())) {
-					indexToDelete++;
-				}
-				remainingAttributes.remove(indexToDelete);
-				System.out.println("attributes " + attributes.toString());
-				System.out.println("remainingAttributes " + remainingAttributes.toString());
+				//System.out.println(attributes.toString());
+				//System.out.println(remainingAttributes.toString());
+				remainingAttributes.remove(selectedAttribute.getIndex());
+				//System.out.println(attributes.toString());
+				//System.out.println(remainingAttributes.toString());
 			}
 		}
 
@@ -79,7 +75,8 @@ public class ID3 {
 		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
 			values.add(entry.getValue());
 		}
-		double entropyS = calculateEntropy(this.instances.getNumberOfDataRows(),values);
+		//double entropyS = calculateEntropy(this.instances.getNumberOfDataRows(),values);
+		double entropyS = calculateEntropy(instances.getInstances().size(),values);
 		 
 		for (Integer i : attributes) {
 			HashMap<String, HashMap<String, Integer>> examplesPerClassPerAttributs = new HashMap<String, HashMap<String, Integer>>();
@@ -109,7 +106,8 @@ public class ID3 {
 					ratio += value.getValue();
 					val.add(value.getValue());
 				}
-				gain -= ((double) ratio / (double) instances.getNumberOfDataRows()) * calculateEntropy(ratio, val);
+				//gain -= ((double) ratio / (double) instances.getNumberOfDataRows()) * calculateEntropy(ratio, val);
+				gain -= ((double) ratio / (double) instances.getInstances().size()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
 			// Affichage temporaire de chaque gain

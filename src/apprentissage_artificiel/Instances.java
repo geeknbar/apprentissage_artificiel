@@ -10,13 +10,13 @@ public class Instances {
 	private String relationName;
 	private LinkedHashMap<String, ArrayList<String>> attributes;
 	ArrayList<Instance> instances;
-	int numberOfDataRows;
+	//int numberOfDataRows;
 	
 	public Instances() {
 		this.relationName = INIT;
 		this.attributes = new LinkedHashMap<String, ArrayList<String>>();
 		this.instances = new ArrayList<Instance>();
-		this.numberOfDataRows = 0;
+		//this.numberOfDataRows = 0;
 	}
 	
 	public void loadFile(String filePath) {
@@ -55,7 +55,7 @@ public class Instances {
 	public void addInstance(Instance instance) {
 		this.instances.add(instance);
 	}
-
+/*
 	public int getNumberOfDataRows() {
 		return numberOfDataRows;
 	}
@@ -67,7 +67,7 @@ public class Instances {
 	public void incNumberOfDataRows() {
 		this.numberOfDataRows++;
 	}
-	
+	*/
 	public void displayInstances() {
 		System.out.println("Relation Name = " + relationName);
 		
@@ -80,7 +80,7 @@ public class Instances {
 			System.out.println(instance.getInstanceClass().getValue());
 		}
 		
-		System.out.println("Number of data rows : " + numberOfDataRows);
+		//System.out.println("Number of data rows : " + numberOfDataRows);
 		
 	}
 }

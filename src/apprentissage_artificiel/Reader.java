@@ -56,12 +56,12 @@ public class Reader {
 					if (lineSplit[0].equals(DATA)) {
 						isData = true;
 					} else if (isData) {
-						this.instances.incNumberOfDataRows();
+						//this.instances.incNumberOfDataRows();
 						Instance newInstance = new Instance();
 						
 						String attributes[] = line.split(",");
 						for (int i = 0; i < attributes.length - 1; i++) {
-							newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i]));
+							newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i], i));
 						}
 						newInstance.setInstanceClass(new InstanceClass(attributes[attributes.length - 1]));
 						this.instances.addInstance(newInstance);
