@@ -10,7 +10,7 @@ public class ID3 {
 	public final static String INIT = "";
 
 	private Attribute attribute;
-	private ArrayList<ID3> sons;
+	private HashMap<String, ID3> sons;
 	private ArrayList<String> leafs;
 	
 	public ID3() {
