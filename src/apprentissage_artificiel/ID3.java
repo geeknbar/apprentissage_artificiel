@@ -26,19 +26,24 @@ public class ID3 {
 	 * @param attributes
 	 *            attributsNonCibles
 	 */
-	public void recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
+	public ID3 recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			// retourner un nœud Erreur
+			return null;
 		} else if (attributes.size() == 0) { /* Nœud terminal */
 			// retourner un nœud ayant la valeur la plus représentée pour
 			// attributCible
+			return null;
 		} else {
 			HashSet<String> instanceClassValues = new HashSet<String>();
 			for (Instance instance : instances.getInstances()) {
+				// Affichage temporaire
+				System.out.println(instance.getInstanceClass().getValue());
 				instanceClassValues.add(instance.getInstanceClass().getValue());
 			}
 			if (instanceClassValues.size() == 1) {
 				// retourner un noeud ayant cette valeur
+				return null;
 			} else {
 				Attribute selectedAttribute = bestAttribute(instances, attributes);
 				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
@@ -47,11 +52,13 @@ public class ID3 {
 				remainingAttributes.remove(selectedAttribute.getIndex());
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
-				
-				
+				for (String s : instances.getAttributes().get(selectedAttribute.getName())) {
+					sons = new HashMap<String, ID3>();
+					sons.put(s, recursive(filterInstance(instances, selectedAttribute, s), new InstanceClass("yes"), remainingAttributes));
+				}
 			}
 		}
-
+		return null;
 	}
 
 	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {	
@@ -98,7 +105,10 @@ public class ID3 {
 					}
 				}
 			}
-			System.out.println(examplesPerClassPerAttributs.toString() + "\t*** FIN ***");
+			
+			// Affichage temporaire
+			//System.out.println(examplesPerClassPerAttributs.toString() + "\t*** FIN ***");
+			
 			double gain = entropyS;
 			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs.entrySet()) {
 				ArrayList<Integer> val = new ArrayList<Integer>();
@@ -112,7 +122,8 @@ public class ID3 {
 				val.clear();
 			}
 			// Affichage temporaire de chaque gain
-			System.out.println("Gain : " + gain);
+			//System.out.println("Gain : " + gain);
+			
 			if (gain > topGain) {
 				topGain = gain;
 				topAttribute = instances.getInstances().get(0).getAttributes().get(i);
@@ -122,6 +133,35 @@ public class ID3 {
 		//System.out.println(topGain[0] + " " + topGain[1]);
 		
 		return topAttribute;
+	}
+	
+	public Instances filterInstance(Instances instances, Attribute attribute, String value) {
+		// Affichage temporaire 
+		//System.out.println("Attribut = " + attribute.getName());
+		//System.out.println("Valeur = " + value);
+		
+		Instances newInstances = new Instances();
+		newInstances.setRelationName(instances.getRelationName());
+		newInstances.setAttributes(instances.getAttributes());
+		ArrayList<Instance> arrayInstance = new ArrayList<Instance>();
+		for (int i = 0; i < instances.getInstances().size(); i++) {
+			if (instances.getInstances().get(i).getAttributes().get(attribute.getIndex()).getValue().equals(value)) {
+				Instance newInstance = new Instance();
+				for (Attribute att : instances.getInstances().get(i).getAttributes()) {
+					newInstance.addAttribute(new Attribute(att.getName(), att.getValue(), att.getIndex()));
+				}
+				InstanceClass newInstanceClass = new InstanceClass(instances.getInstances().get(i).getInstanceClass().getValue());
+				newInstance.setInstanceClass(newInstanceClass);
+				arrayInstance.add(newInstance);
+			}
+		}
+		newInstances.setInstances(arrayInstance);
+		
+		// Affichage temporaire
+		//newInstances.displayInstances();
+		//System.out.println("**** FIN ****");
+		
+		return newInstances;
 	}
 
 	private double calculateEntropy(int nbExamples, ArrayList<Integer> values) {
