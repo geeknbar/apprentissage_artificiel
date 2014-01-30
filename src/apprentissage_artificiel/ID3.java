@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 public class ID3 {	 
 
 	public final static String INIT = "";
+	public final static String LEAF = "LEAF";
 
 	private Attribute attribute;
 	private HashMap<String, ID3> sons;
@@ -30,30 +31,47 @@ public class ID3 {
 	public ID3 recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			// retourner un nœud Erreur
-			System.out.println("IL EST PASSE PAR LA !!!");
+			//System.out.println("IL EST PASSE PAR LA !!!");
 			return null;
 		} else if (attributes.size() == 0) { /* Nœud terminal */
-			// retourner un nœud ayant la valeur la plus représentée pour
-			// attributCible
-			System.out.println("ET ICI !!!");
-			return null;
+			// retourner un nœud ayant la valeur la plus représentée pour attributCible
+			//System.out.println("ET ICI !!!");
+			HashMap<String, Integer> nbInstanceClass = new HashMap<String, Integer>();
+			for (Instance instance : instances.getInstances()) {
+				if (!nbInstanceClass.containsKey(instance.getInstanceClass().getValue())) {
+					nbInstanceClass.put(instance.getInstanceClass().getValue(), 1);
+				} else {
+					int toModify = nbInstanceClass.get(instance.getInstanceClass().getValue());
+					toModify++;
+					nbInstanceClass.put(instance.getInstanceClass().getValue(), toModify);
+				}
+			}
+			String topClass = INIT;
+			int nbTopClass = 0;
+			for (Entry<String, Integer> entry : nbInstanceClass.entrySet()) {
+				if (entry.getValue() > nbTopClass) {
+					topClass = entry.getKey();
+					nbTopClass = entry.getValue();
+				}
+			}
+			ID3 newId3 = new ID3();
+			Attribute attTemp = new Attribute(LEAF, topClass, -1);
+			newId3.setAttribute(attTemp);
+			return newId3;
 		} else {
 			HashSet<String> instanceClassValues = new HashSet<String>();
-			for (Instance instance : instances.getInstances()) {
-				// Affichage temporaire
-				//System.out.println(instance.getInstanceClass().getValue());
-				
+			for (Instance instance : instances.getInstances()) {	
 				instanceClassValues.add(instance.getInstanceClass().getValue());
 			}
 			if (instanceClassValues.size() == 1) {
 				// retourner un noeud ayant cette valeur
-				System.out.println("ET POURQUOI PAS LA ???");
+				//System.out.println("ET POURQUOI PAS LA ???");
 				ID3 newId3 = new ID3();
-				Attribute attTemp = new Attribute("LEAF", instanceClassValues.toArray()[0].toString(), -1);
+				Attribute attTemp = new Attribute(LEAF, instanceClassValues.toArray()[0].toString(), -1);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else {
-				System.out.println("ET POUR TERMINE ICI BIEN SUR !!!");
+				//System.out.println("ET POUR TERMINE ICI BIEN SUR !!!");
 				// attributSélectionné = attribut maximisant le gain d'information parmi attributsNonCibles
 				Attribute attTemp = bestAttribute(instances, attributes);
 				// attributsNonCiblesRestants = suppressionListe(attributsNonCibles, attributSélectionné)
@@ -78,7 +96,6 @@ public class ID3 {
 	}
 
 	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {	
-		
 		double topGain = 0;
 		Attribute topAttribute = null;
 		
@@ -99,7 +116,6 @@ public class ID3 {
 		for (Entry<String, Integer> entry : examplesPerClass.entrySet()) {
 			values.add(entry.getValue());
 		}
-		//double entropyS = calculateEntropy(this.instances.getNumberOfDataRows(),values);
 		double entropyS = calculateEntropy(instances.getInstances().size(),values);
 		 
 		for (Integer i : attributes) {
@@ -121,10 +137,6 @@ public class ID3 {
 					}
 				}
 			}
-			
-			// Affichage temporaire
-			//System.out.println(examplesPerClassPerAttributs.toString() + "\t*** FIN ***");
-			
 			double gain = entropyS;
 			for (Entry<String, HashMap<String, Integer>> entry : examplesPerClassPerAttributs.entrySet()) {
 				ArrayList<Integer> val = new ArrayList<Integer>();
@@ -133,29 +145,18 @@ public class ID3 {
 					ratio += value.getValue();
 					val.add(value.getValue());
 				}
-				//gain -= ((double) ratio / (double) instances.getNumberOfDataRows()) * calculateEntropy(ratio, val);
 				gain -= ((double) ratio / (double) instances.getInstances().size()) * calculateEntropy(ratio, val);
 				val.clear();
 			}
-			// Affichage temporaire de chaque gain
-			//System.out.println("Gain : " + gain);
-			
 			if (gain > topGain) {
 				topGain = gain;
 				topAttribute = instances.getInstances().get(0).getAttributes().get(i);
 			}
 		}
-		
-		//System.out.println(topGain[0] + " " + topGain[1]);
-		
 		return topAttribute;
 	}
 	
 	public Instances filterInstance(Instances instances, Attribute attribute, String value) {
-		// Affichage temporaire 
-		//System.out.println("Attribut = " + attribute.getName());
-		//System.out.println("Valeur = " + value);
-		
 		Instances newInstances = new Instances();
 		newInstances.setRelationName(instances.getRelationName());
 		newInstances.setAttributes(instances.getAttributes());
@@ -171,12 +172,7 @@ public class ID3 {
 				arrayInstance.add(newInstance);
 			}
 		}
-		newInstances.setInstances(arrayInstance);
-		
-		// Affichage temporaire
-		//newInstances.displayInstances();
-		//System.out.println("**** FIN ****");
-		
+		newInstances.setInstances(arrayInstance);		
 		return newInstances;
 	}
 
@@ -225,17 +221,18 @@ public class ID3 {
 		sons.put(value, id3);
 	}
 	
-	public void display() {
-		System.out.println("Attribut = " + attribute.getName());
-		/*if (leafs.size() > 0) {
-			for (Entry<String, String> entry : leafs.entrySet()) {
-				System.out.println("Feuille - " + entry.getKey() + " - " + entry.getValue());
-			}
-		}*/
+	public void display(int inc) {
+		
+		if (!LEAF.equals(attribute.getName())) {
+			System.out.println("Attribut" + inc + " = " + attribute.getName());
+		} else {
+			System.out.println("ValeurDeClasse" + inc + " = " + attribute.getValue());
+		}
+		
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
 				System.out.println("Fils - " + entry.getKey());
-				entry.getValue().display();
+				entry.getValue().display(inc + 1);
 			}
 		}
 	}
