@@ -38,7 +38,8 @@ public class ID3 {
 			HashSet<String> instanceClassValues = new HashSet<String>();
 			for (Instance instance : instances.getInstances()) {
 				// Affichage temporaire
-				System.out.println(instance.getInstanceClass().getValue());
+				//System.out.println(instance.getInstanceClass().getValue());
+				
 				instanceClassValues.add(instance.getInstanceClass().getValue());
 			}
 			if (instanceClassValues.size() == 1) {
@@ -49,7 +50,12 @@ public class ID3 {
 				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
-				remainingAttributes.remove(selectedAttribute.getIndex());
+				int i = 0;
+				while (attributes.get(i) != selectedAttribute.getIndex()) {
+					i++;
+				}
+				//remainingAttributes.remove(selectedAttribute.getIndex());
+				remainingAttributes.remove(i);
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
 				for (String s : instances.getAttributes().get(selectedAttribute.getName())) {
