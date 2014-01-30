@@ -44,23 +44,30 @@ public class ID3 {
 			}
 			if (instanceClassValues.size() == 1) {
 				// retourner un noeud ayant cette valeur
+				//leafs.p
 				return null;
 			} else {
-				Attribute selectedAttribute = bestAttribute(instances, attributes);
+				//Attribute selectedAttribute = bestAttribute(instances, attributes);
+				attribute = bestAttribute(instances, attributes);
 				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
 				int i = 0;
-				while (attributes.get(i) != selectedAttribute.getIndex()) {
+				//while (attributes.get(i) != selectedAttribute.getIndex()) {
+				while (attributes.get(i) != attribute.getIndex()) {
 					i++;
 				}
 				//remainingAttributes.remove(selectedAttribute.getIndex());
 				remainingAttributes.remove(i);
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
-				for (String s : instances.getAttributes().get(selectedAttribute.getName())) {
+				/*for (String s : instances.getAttributes().get(selectedAttribute.getName())) {
 					sons = new HashMap<String, ID3>();
 					sons.put(s, recursive(filterInstance(instances, selectedAttribute, s), new InstanceClass("yes"), remainingAttributes));
+				}*/
+				for (String s : instances.getAttributes().get(attribute.getName())) {
+					sons = new HashMap<String, ID3>();
+					sons.put(s, recursive(filterInstance(instances, attribute, s), new InstanceClass("yes"), remainingAttributes));
 				}
 			}
 		}
