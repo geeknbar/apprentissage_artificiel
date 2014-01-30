@@ -15,8 +15,8 @@ public class Main {
 		tmp.add(1);
 		tmp.add(2);
 		tmp.add(3);
-		//id3.bestAttribute(instances, tmp);
-		id3.recursive(instances, new InstanceClass("yes"), tmp);
+		ID3 test = id3.recursive(instances, new InstanceClass("yes"), tmp);
+		test.display();
 	}
 
 }

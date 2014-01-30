@@ -2,7 +2,7 @@ package exemple_id3_play_tennis;
 import java.util.ArrayList;
 
 public class Entropy {	
-	public static double calculateEntropy(ArrayList<Record> data) {
+	/*public static double calculateEntropy(ArrayList<Record> data) {
 		double entropy = 0;
 		
 		if(data.size() == 0) {
@@ -37,5 +37,5 @@ public class Entropy {
 		}
 		
 		return gain;
-	}
+	}*/
 }

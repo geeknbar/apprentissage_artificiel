@@ -2,7 +2,7 @@ package exemple_id3_play_tennis;
 import java.util.*;
 
 public class Node {
-	private Node parent;
+	/*private Node parent;
 	public Node[] children;
 	private ArrayList<Record> data;
 	private double entropy;
@@ -64,5 +64,5 @@ public class Node {
 
 	public DiscreteAttribute getTestAttribute() {
 		return testAttribute;
-	}
+	}*/
 	}

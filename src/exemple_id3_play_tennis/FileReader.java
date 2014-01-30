@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class FileReader {
-	public static final String PATH_TO_DATA_FILE = "playtennis.data";
+	/*public static final String PATH_TO_DATA_FILE = "playtennis.data";
 
     public static ArrayList<Record> buildRecords() {
 		BufferedReader reader = null;
@@ -101,5 +101,5 @@ public class FileReader {
            }
         }
 		return records;
-	}
+	}*/
 }

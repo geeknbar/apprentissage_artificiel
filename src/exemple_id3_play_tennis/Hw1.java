@@ -2,7 +2,7 @@ package exemple_id3_play_tennis;
 import java.util.*;
 
 public class Hw1 {
-	public static int NUM_ATTRS = 6;
+	/*public static int NUM_ATTRS = 6;
 	public static ArrayList<String> attrMap;
 	public static ArrayList<Integer> usedAttributes = new ArrayList<Integer>();
 
@@ -132,5 +132,5 @@ public class Hw1 {
 		attrMap.add("Humidity");
 		attrMap.add("Wind");
 		attrMap.add("PlayTennis");
-	}
+	}*/
 }

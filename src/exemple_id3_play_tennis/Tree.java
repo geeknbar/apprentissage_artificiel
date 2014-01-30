@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Tree {
-	public Node buildTree(ArrayList<Record> records, Node root, LearningSet learningSet) {
+/*	public Node buildTree(ArrayList<Record> records, Node root, LearningSet learningSet) {
 		int bestAttribute = -1;
 		double bestGain = 0;
 		root.setEntropy(Entropy.calculateEntropy(root.getData()));
@@ -79,5 +79,5 @@ public class Tree {
 	
 	public double calculateSurrogates(ArrayList<Record> records) {
 		return 0;
-	}
+	}*/
 }
