@@ -11,7 +11,7 @@ public class ID3 {
 
 	private Attribute attribute;
 	private HashMap<String, ID3> sons;
-	private ArrayList<String> leafs;
+	private HashMap<String, String> leafs;
 	
 	public ID3() {
 		
@@ -47,6 +47,7 @@ public class ID3 {
 				remainingAttributes.remove(selectedAttribute.getIndex());
 				//System.out.println(attributes.toString());
 				//System.out.println(remainingAttributes.toString());
+				
 				
 			}
 		}
