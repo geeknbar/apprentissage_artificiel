@@ -1,8 +1,6 @@
 package apprentissage_artificiel;
 
 public class Attribute {
-
-	public final static String INIT = "";
 	
 	private String name;
 	private String value;

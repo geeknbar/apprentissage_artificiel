@@ -1,8 +1,6 @@
 package apprentissage_artificiel;
 
 public class InstanceClass {
-
-	public final static String INIT = "";
 	
 	private String value;
 	

@@ -9,14 +9,15 @@ public class ID3 {
 
 	public final static String INIT = "";
 	public final static String LEAF = "LEAF";
+	public final static int LEAF_I = -1;
+	public final static String ERROR = "ERROR";
+	public final static int ERROR_I = -2;
 
 	private Attribute attribute;
 	private HashMap<String, ID3> sons;
-	//private HashMap<String, String> leafs;
 	
 	public ID3() {
 		sons = new HashMap<String, ID3>();
-		//leafs = new HashMap<String, String>();
 	}
 
 	/**
@@ -30,12 +31,12 @@ public class ID3 {
 	 */
 	public ID3 recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
-			// retourner un nœud Erreur
-			//System.out.println("IL EST PASSE PAR LA !!!");
-			return null;
+			ID3 newId3 = new ID3();
+			Attribute attTemp = new Attribute(ERROR, INIT, ERROR_I);
+			newId3.setAttribute(attTemp);
+			return newId3;
 		} else if (attributes.size() == 0) { /* Nœud terminal */
 			// retourner un nœud ayant la valeur la plus représentée pour attributCible
-			//System.out.println("ET ICI !!!");
 			HashMap<String, Integer> nbInstanceClass = new HashMap<String, Integer>();
 			for (Instance instance : instances.getInstances()) {
 				if (!nbInstanceClass.containsKey(instance.getInstanceClass().getValue())) {
@@ -55,7 +56,7 @@ public class ID3 {
 				}
 			}
 			ID3 newId3 = new ID3();
-			Attribute attTemp = new Attribute(LEAF, topClass, -1);
+			Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I);
 			newId3.setAttribute(attTemp);
 			return newId3;
 		} else {
@@ -65,13 +66,11 @@ public class ID3 {
 			}
 			if (instanceClassValues.size() == 1) {
 				// retourner un noeud ayant cette valeur
-				//System.out.println("ET POURQUOI PAS LA ???");
 				ID3 newId3 = new ID3();
-				Attribute attTemp = new Attribute(LEAF, instanceClassValues.toArray()[0].toString(), -1);
+				Attribute attTemp = new Attribute(LEAF, instanceClassValues.toArray()[0].toString(), LEAF_I);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else {
-				//System.out.println("ET POUR TERMINE ICI BIEN SUR !!!");
 				// attributSélectionné = attribut maximisant le gain d'information parmi attributsNonCibles
 				Attribute attTemp = bestAttribute(instances, attributes);
 				// attributsNonCiblesRestants = suppressionListe(attributsNonCibles, attributSélectionné)
@@ -208,30 +207,29 @@ public class ID3 {
 	public void setSons(HashMap<String, ID3> sons) {
 		this.sons = sons;
 	}
-/*
-	public HashMap<String, String> getLeafs() {
-		return leafs;
-	}
 
-	public void setLeafs(HashMap<String, String> leafs) {
-		this.leafs = leafs;
-	}
-*/
 	public void addSon(String value, ID3 id3) {
 		sons.put(value, id3);
 	}
 	
 	public void display(int inc) {
-		
 		if (!LEAF.equals(attribute.getName())) {
-			System.out.println("Attribut" + inc + " = " + attribute.getName());
+			for (int i = 0; i < inc; i++) {
+				System.out.print("\t");
+			}
+			System.out.print("Attribut" + inc + " = " + attribute.getName() + "\n");
 		} else {
-			System.out.println("ValeurDeClasse" + inc + " = " + attribute.getValue());
+			for (int i = 0; i < inc; i++) {
+				System.out.print("\t");
+			}
+			System.out.print("ValeurDeClasse" + inc + " = " + attribute.getValue() + "\n");
 		}
-		
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
-				System.out.println("Fils - " + entry.getKey());
+				for (int i = 0; i < inc; i++) {
+					System.out.print("\t");
+				}
+				System.out.print("Fils - " + entry.getKey() + "\n");
 				entry.getValue().display(inc + 1);
 			}
 		}
