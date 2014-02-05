@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) {
-		String filePath = "./bin/doc/dataPourProjet/cars.arff";
+		String filePath = "./bin/doc/dataPourProjet/agaricus-lepiota.arff";
 		Instances instances = new Instances();
 		instances.loadFile(filePath);
 		//instances.displayInstances();
