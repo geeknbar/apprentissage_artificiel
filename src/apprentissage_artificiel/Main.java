@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) {
-		String filePath = "./bin/doc/weather.nominal.arff";
+		//String filePath = "./bin/doc/weather.nominal.arff";
+		String filePath = "./bin/doc/mika.nominal.arff";
 		Instances instances = new Instances();
 		instances.loadFile(filePath);
 		//instances.displayInstances();
@@ -13,8 +14,8 @@ public class Main {
 		ArrayList<Integer> tmp = new ArrayList<Integer>();
 		tmp.add(0);
 		tmp.add(1);
-		tmp.add(2);
-		tmp.add(3);
+		//tmp.add(2);
+		//tmp.add(3);
 		ID3 test = id3.recursive(instances, new InstanceClass("yes"), tmp);
 		test.display(0);
 	}

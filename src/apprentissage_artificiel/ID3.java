@@ -215,19 +215,19 @@ public class ID3 {
 	public void display(int inc) {
 		if (!LEAF.equals(attribute.getName())) {
 			for (int i = 0; i < inc; i++) {
-				System.out.print("\t");
+				System.out.print(" | ");
 			}
 			System.out.print("Attribut" + inc + " = " + attribute.getName() + "\n");
 		} else {
 			for (int i = 0; i < inc; i++) {
-				System.out.print("\t");
+				System.out.print(" | ");
 			}
 			System.out.print("ValeurDeClasse" + inc + " = " + attribute.getValue() + "\n");
 		}
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
 				for (int i = 0; i < inc; i++) {
-					System.out.print("\t");
+					System.out.print(" | ");
 				}
 				System.out.print("Fils - " + entry.getKey() + "\n");
 				entry.getValue().display(inc + 1);
