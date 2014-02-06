@@ -1,3 +1,15 @@
+%
+% On represente des chiffres qui peuvent etre representes sur radio-reveil
+%
+% On utilise 7 leds pour representer les chiffres : A, B, C, D, E, F, G
+%
+%      A 
+%   F     B   
+%      G
+%   E     C
+%      D
+%
+
 @relation chiffre
 
 @attribute A {on, off}
@@ -10,13 +22,13 @@
 @attribute Premier {P, N}
 
 @data
-off,on,on,off,off,off,off,N
-on,on,off,on,on,off,on,P
-on,on,on,on,off,off,on,P
-off,on,on,off,off,on,on,N
-on,off,on,on,off,on,on,P
-on,off,on,on,on,on,on,N
-on,on,on,off,off,off,off,P
-on,on,on,on,on,on,on,N
-on,on,on,on,off,on,on,N
-on,on,on,on,on,on,off,N
+off,on,on,off,off,off,off,N  % 1
+on,on,off,on,on,off,on,P     % 2
+on,on,on,on,off,off,on,P     % 3
+off,on,on,off,off,on,on,N    % 4
+on,off,on,on,off,on,on,P     % 5
+on,off,on,on,on,on,on,N      % 6
+on,on,on,off,off,off,off,P   % 7
+on,on,on,on,on,on,on,N       % 8
+on,on,on,on,off,on,on,N      % 9
+on,on,on,on,on,on,off,N      % 0
