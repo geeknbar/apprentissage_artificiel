@@ -211,7 +211,7 @@ public class ID3 {
 		sons.put(value, id3);
 	}
 	
-	public void display(int inc) {
+	/*public void display(int inc) {
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
 				for (int i = 0; i < inc; i++) {
@@ -230,6 +230,32 @@ public class ID3 {
 		if (LEAF.equals(attribute.getName())) {
 			System.out.print(": " + attribute.getValue());
 		}
+	}*/
+	
+	public String display(int inc) {
+		
+		String display = INIT;
+		
+		if (sons.size() > 0) {
+			for (Entry<String, ID3> entry : sons.entrySet()) {
+				for (int i = 0; i < inc; i++) {
+					display += "|   ";
+				}
+				display += attribute.getName() + " = " + entry.getKey();
+				if (!LEAF.equals(entry.getValue().getAttribute().getName())) {
+					display += "\n";
+					display += entry.getValue().display(inc + 1);
+				} else {
+					display += entry.getValue().display(inc + 1);
+					display += "\n";
+				}
+			}
+		}
+		if (LEAF.equals(attribute.getName())) {
+			display += ": " + attribute.getValue();
+		}
+		
+		return display;
 	}
 
 }
