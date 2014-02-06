@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 
 public class Hmi extends JFrame {
 
@@ -122,7 +124,14 @@ public class Hmi extends JFrame {
 		btnCompute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ID3 id3Return = id3.compute(instances);
-				taOutput.setText(id3Return.display(0));
+				taOutput.setText("Relation:\t" + instances.getRelationName() + "\n");
+				taOutput.append("Instances:\t" + instances.getInstances().size() + "\n");
+				taOutput.append("Attributes:\t" + instances.getAttributes().size() + "\n");
+				for (Entry<String, ArrayList<String>> entry : instances.getAttributes().entrySet()) {
+					taOutput.append("\t" + entry.getKey() + "\n");
+				}
+				taOutput.append("\n\n Id3 Decision Tree\n\n");
+				taOutput.append(id3Return.display(0));
 			}
 		});
 		panelWest.add(btnCompute, BorderLayout.SOUTH);
