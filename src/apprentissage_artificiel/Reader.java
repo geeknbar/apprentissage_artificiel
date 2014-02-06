@@ -13,6 +13,7 @@ public class Reader {
 	public final static String RELATION = "@relation";
 	public final static String ATTRIBUTE = "@attribute";
 	public final static String DATA = "@data";
+	public final static String COMMENT = "%";
 	
 	private String filePath;
 	private Instances instances;
@@ -34,37 +35,42 @@ public class Reader {
 			while ((line = br.readLine()) != null) {
 				if (!line.isEmpty()) {
 					String lineSplit[] = line.split(" ", 3);
-					if (lineSplit[0].equals(RELATION)) {
-						this.instances.setRelationName(lineSplit[1]);
-					}
-
-					if (lineSplit[0].equals(ATTRIBUTE)) {
-						String name = lineSplit[1];
-						String values = lineSplit[2];
-						
-						values = values.replaceAll(" ", "");
-						values = values.replaceAll("\\{", "");
-						values = values.replaceAll("\\}", "");
-						
-						ArrayList<String> possibleValues = new ArrayList<String>();
-						for (String value : values.split(",")) {
-							possibleValues.add(value);
+					if (lineSplit[0].equals(COMMENT)) {
+						if (lineSplit[0].equals(RELATION)) {
+							this.instances.setRelationName(lineSplit[1]);
 						}
-						this.instances.addAttribute(name, possibleValues);
-					}
-
-					if (lineSplit[0].equals(DATA)) {
-						isData = true;
-					} else if (isData) {
-						//this.instances.incNumberOfDataRows();
-						Instance newInstance = new Instance();
-						
-						String attributes[] = line.split(",");
-						for (int i = 0; i < attributes.length - 1; i++) {
-							newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i], i));
+						if (lineSplit[0].equals(ATTRIBUTE)) {
+							String name = lineSplit[1];
+							String values = lineSplit[2];
+							
+							values = values.replaceAll(" ", "");
+							values = values.replaceAll("\\{", "");
+							values = values.replaceAll("\\}", "");
+							
+							ArrayList<String> possibleValues = new ArrayList<String>();
+							for (String value : values.split(",")) {
+								possibleValues.add(value);
+							}
+							this.instances.addAttribute(name, possibleValues);
 						}
-						newInstance.setInstanceClass(new InstanceClass(attributes[attributes.length - 1]));
-						this.instances.addInstance(newInstance);
+						if (lineSplit[0].equals(DATA)) {
+							isData = true;
+						} else if (isData) {
+							Instance newInstance = new Instance();
+							line = line.trim();
+							if (line.contains(COMMENT)) {
+								line = line.substring(0, line.indexOf(COMMENT));
+							}
+							line = line.replaceAll(" ", "");
+							line = line.replaceAll("\t", "");
+							line = line.replaceAll("'", "");
+							String attributes[] = line.split(",");
+							for (int i = 0; i < attributes.length - 1; i++) {
+								newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i], i));
+							}
+							newInstance.setInstanceClass(new InstanceClass(attributes[attributes.length - 1]));
+							this.instances.addInstance(newInstance);
+						}	
 					}
 				}
 
