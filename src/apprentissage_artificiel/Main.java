@@ -3,19 +3,9 @@ package apprentissage_artificiel;
 public class Main {
 
 	public static void main(String[] args) {
-<<<<<<< HEAD
 		String filePath = "./bin/doc/weather.nominal.arff";
 		//String filePath = "./bin/doc/mika.nominal.arff";
 		//String filePath = "./bin/doc/tic-tac-toe.arff";
-=======
-<<<<<<< HEAD
-		String filePath = "./bin/doc/dataPourProjet/agaricus-lepiota.arff";
-=======
-		//String filePath = "./bin/doc/weather.nominal.arff";
-		//String filePath = "./bin/doc/mika.nominal.arff";
-		String filePath = "./bin/doc/tic-tac-toe.arff";
->>>>>>> 564c3d63006ee19219882c696cb6a8a83e8e775d
->>>>>>> e7d24412a1db3c763f1f5a491bcdde1d7d685285
 		Instances instances = new Instances();
 		instances.loadFile(filePath);
 		//instances.displayInstances();
