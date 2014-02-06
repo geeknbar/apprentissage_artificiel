@@ -69,7 +69,7 @@ public class Reader {
 							line = line.replaceAll("'", "");
 							String attributes[] = line.split(",");
 							for (int i = 0; i < attributes.length - 1; i++) {
-								newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i], i, 0));
+								newInstance.addAttribute(new Attribute(this.instances.getAttributes().keySet().toArray()[i].toString(), attributes[i], i, 0, 0));
 							}
 							newInstance.setInstanceClass(new InstanceClass(attributes[attributes.length - 1]));
 							this.instances.addInstance(newInstance);
