@@ -30,7 +30,7 @@ public class ID3 {
 		for (int i = 0; i < instances.getAttributes().size() - 1; i++) {
 			attributes.add(i);
 		}
-		return recursive(instances, attributes);
+		return recursive(instances, attributes, 0, 0, 0);
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class ID3 {
 	 * @param attributes Liste des index des attributs non traités.
 	 * @return Retourne un noeud (une instance de la classe ID3).
 	 */
-	public ID3 recursive(Instances instances, ArrayList<Integer> attributes) {
+	public ID3 recursive(Instances instances, ArrayList<Integer> attributes, int depth, int maxDepth, int errorRate) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			/* Retourner un noeuf erreur */
 			ID3 newId3 = new ID3();
@@ -97,7 +97,7 @@ public class ID3 {
 				/* Création d'un fils pour chaque valeur possible de selectedAttribute */
 		        /* newId3->addSon(attributeValue, ID3(filterInstance, selectedAttribute, attributeValue), remainingAttributes) */
 				for (String attributeValue : instances.getAttributes().get(selectedAttribute.getName())) {
-					newId3.addSon(attributeValue, recursive(filterInstance(instances, selectedAttribute, attributeValue), remainingAttributes));
+					newId3.addSon(attributeValue, recursive(filterInstance(instances, selectedAttribute, attributeValue), remainingAttributes, depth + 1, maxDepth, errorRate));
 				}
 				
 				/* Retourne le nouveau noeud */
