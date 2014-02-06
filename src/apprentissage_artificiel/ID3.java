@@ -228,7 +228,7 @@ public class ID3 {
 			}
 		}
 		if (LEAF.equals(attribute.getName())) {
-			System.out.print(" : " + attribute.getValue());
+			System.out.print(": " + attribute.getValue());
 		}
 	}
 

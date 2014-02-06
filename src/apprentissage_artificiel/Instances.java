@@ -53,17 +53,4 @@ public class Instances {
 	public void addInstance(Instance instance) {
 		this.instances.add(instance);
 	}
-
-	public void displayInstances() {
-		System.out.println("Relation Name = " + relationName);
-		
-		System.out.println(attributes.toString());
-		
-		for (Instance instance : instances) {
-			for (Attribute attribut : instance.getAttributes()) {
-				System.out.println(attribut.getName() + " " + attribut.getValue());
-			}
-			System.out.println(instance.getInstanceClass().getValue());
-		}
-	}
 }
