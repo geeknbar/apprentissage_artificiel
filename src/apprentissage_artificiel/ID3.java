@@ -2,7 +2,6 @@ package apprentissage_artificiel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class ID3 {	 
@@ -71,17 +70,29 @@ public class ID3 {
 			newId3.setAttribute(attTemp);
 			return newId3;
 		} else {
-			HashSet<String> instanceClassValues = new HashSet<String>();
+			HashMap<String, Integer> instanceClassValues = new HashMap<String, Integer>();
 			for (Instance instance : instances.getInstances()) {	
-				instanceClassValues.add(instance.getInstanceClass().getValue());
+				if (instanceClassValues.containsKey(instance.getInstanceClass().getValue())) {
+					int toModify = instanceClassValues.get(instance.getInstanceClass().getValue());
+					toModify++;
+					instanceClassValues.put(instance.getInstanceClass().getValue(), toModify);
+				} else {
+					instanceClassValues.put(instance.getInstanceClass().getValue(), 1);
+				}
 			}
 			if (instanceClassValues.size() == 1) { /* Une seule valeur de classe représentée */
 				/* Retourner un noeud ayant cette valeur */
 				ID3 newId3 = new ID3();
-				Attribute attTemp = new Attribute(LEAF, instanceClassValues.toArray()[0].toString(), LEAF_I);
+				Attribute attTemp = new Attribute(LEAF, instanceClassValues.entrySet().toArray()[0].toString(), LEAF_I);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else { /* Plusieurs valeurs de classe représentées */
+				
+				if (depth == maxDepth) {
+					//ID3 newIDId3 = new ID3();
+					
+				}
+				
 				/* selectedAttribute = attribut maximisant le gain d'information parmi les attributs restants */
 				Attribute selectedAttribute = bestAttribute(instances, attributes);
 				/* remainingAttributes = attributes - {selectedAttribute} */
