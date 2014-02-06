@@ -92,14 +92,16 @@ public class ID3 {
 				if (depth == maxDepth && depth > 0) { /* Si la profondeur maximale est atteinte */
 					String topClass = INIT;
 					int nbTopClass = INIT_I;
+					int nbInstance = INIT_I;
 					for (Entry<String, Integer> entry : instanceClassValues.entrySet()) {
+						nbInstance += entry.getValue();
 						if (entry.getValue() > nbTopClass) {
 							topClass = entry.getKey();
 							nbTopClass = entry.getValue();
 						}
 					}
 					ID3 newId3 = new ID3();
-					Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I, 0);
+					Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I, nbInstance - nbTopClass);
 					newId3.setAttribute(attTemp);
 					return newId3;
 				} else {
