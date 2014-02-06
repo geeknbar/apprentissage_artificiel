@@ -40,8 +40,8 @@ public class Hmi extends JFrame {
 	private JTextArea taOutput;
 	private JLabel lblFileName_, lblRelationName_;
 	private final JFileChooser fc = new JFileChooser(new File("./bin/doc/"));
-	private Instances instances = new Instances();
-	private ID3 id3 = new ID3();
+	private Instances instances;
+	private ID3 id3;
 
 	/**
 	 * Launch the application.
@@ -81,6 +81,7 @@ public class Hmi extends JFrame {
 		JButton btnFile = new JButton("File");
 		btnFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				instances = new Instances();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(".arff files", "arff");
 				fc.setFileFilter(filter);
 				int returnVal = fc.showOpenDialog(getParent());
@@ -123,6 +124,7 @@ public class Hmi extends JFrame {
 		JButton btnCompute = new JButton("Compute");
 		btnCompute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				id3 = new ID3();
 				ID3 id3Return = id3.compute(instances);
 				taOutput.setText("Relation:\t" + instances.getRelationName() + "\n");
 				taOutput.append("Instances:\t" + instances.getInstances().size() + "\n");
