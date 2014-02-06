@@ -38,7 +38,7 @@ public class Reader {
 					line = line.replaceAll("\\s", " ");
 					line = line.replaceAll("\t", " ");
 					String lineSplit[] = line.split(" ", 3);
-					if (lineSplit[0].equals(COMMENT)) {
+					if (!lineSplit[0].equals(COMMENT)) {
 						if (lineSplit[0].equals(RELATION)) {
 							this.instances.setRelationName(lineSplit[1]);
 						}
