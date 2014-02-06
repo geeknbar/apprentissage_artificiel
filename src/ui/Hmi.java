@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 
@@ -30,6 +31,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import javax.swing.JTextField;
+import javax.swing.BoxLayout;
+
 public class Hmi extends JFrame {
 
 	/**
@@ -42,6 +46,8 @@ public class Hmi extends JFrame {
 	private final JFileChooser fc = new JFileChooser(new File("./bin/doc/"));
 	private Instances instances;
 	private ID3 id3;
+	private JTextField textFieldRate;
+	private JTextField textFieldDeap;
 
 	/**
 	 * Launch the application.
@@ -119,9 +125,56 @@ public class Hmi extends JFrame {
 		panelWest.setBorder(new TitledBorder(null, "Properties",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(panelWest, BorderLayout.WEST);
-		panelWest.setLayout(new BorderLayout(0, 0));
+		panelWest.setLayout(new BoxLayout(panelWest, BoxLayout.X_AXIS));
+
+		Box verticalBox = Box.createVerticalBox();
+		panelWest.add(verticalBox);
+
+		Box horizontalBoxRate = Box.createHorizontalBox();
+		verticalBox.add(horizontalBoxRate);
+
+		JLabel lblRate = new JLabel("Rate");
+		horizontalBoxRate.add(lblRate);
+
+		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
+		horizontalBoxRate.add(horizontalStrut_2);
+
+		textFieldRate = new JTextField();
+		textFieldRate.setColumns(10);
+		textFieldRate.setMaximumSize(textFieldRate.getPreferredSize());
+		horizontalBoxRate.add(textFieldRate);
+
+		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
+		horizontalBoxRate.add(horizontalStrut_5);
+
+		Component verticalGlue = Box.createVerticalGlue();
+		verticalBox.add(verticalGlue);
+
+		Box horizontalBoxDeap = Box.createHorizontalBox();
+		verticalBox.add(horizontalBoxDeap);
+
+		JLabel lblDeap = new JLabel("Deap");
+		horizontalBoxDeap.add(lblDeap);
+
+		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
+		horizontalBoxDeap.add(horizontalStrut_3);
+
+		textFieldDeap = new JTextField();
+		textFieldDeap.setColumns(10);
+		textFieldDeap.setMaximumSize(textFieldDeap.getPreferredSize());
+		horizontalBoxDeap.add(textFieldDeap);
+
+		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		horizontalBoxDeap.add(horizontalStrut_4);
+
+		Component verticalGlue_1 = Box.createVerticalGlue();
+		verticalBox.add(verticalGlue_1);
+
+		Box horizontalBox = Box.createHorizontalBox();
+		verticalBox.add(horizontalBox);
 
 		JButton btnCompute = new JButton("Compute");
+		horizontalBox.add(btnCompute);
 		btnCompute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id3 = new ID3();
@@ -136,7 +189,6 @@ public class Hmi extends JFrame {
 				taOutput.append(id3Return.display(0));
 			}
 		});
-		panelWest.add(btnCompute, BorderLayout.SOUTH);
 
 		JPanel panelCenter = new JPanel();
 		panelCenter.setBorder(new TitledBorder(null, "Output",
