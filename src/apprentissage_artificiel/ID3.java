@@ -25,7 +25,6 @@ public class ID3 {
 		for (int i = 0; i < instances.getAttributes().size() - 1; i++) {
 			attributes.add(i);
 		}
-		System.out.println(attributes.toString());
 		return recursive(instances, attributes);
 	}
 	
@@ -213,25 +212,23 @@ public class ID3 {
 	}
 	
 	public void display(int inc) {
-		if (!LEAF.equals(attribute.getName())) {
-			for (int i = 0; i < inc; i++) {
-				System.out.print(" | ");
-			}
-			System.out.print("Attribut" + inc + " = " + attribute.getName() + "\n");
-		} else {
-			for (int i = 0; i < inc; i++) {
-				System.out.print(" | ");
-			}
-			System.out.print("ValeurDeClasse" + inc + " = " + attribute.getValue() + "\n");
-		}
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
 				for (int i = 0; i < inc; i++) {
-					System.out.print(" | ");
+					System.out.print("| ");
 				}
-				System.out.print("Fils - " + entry.getKey() + "\n");
-				entry.getValue().display(inc + 1);
+				System.out.print(attribute.getName() + " = " + entry.getKey());
+				if (!LEAF.equals(entry.getValue().getAttribute().getName())) {
+					System.out.print("\n");
+					entry.getValue().display(inc + 1);
+				} else {
+					entry.getValue().display(inc + 1);
+					System.out.print("\n");
+				}
 			}
+		}
+		if (LEAF.equals(attribute.getName())) {
+			System.out.print(" : " + attribute.getValue());
 		}
 	}
 
