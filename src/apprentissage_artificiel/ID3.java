@@ -20,16 +20,16 @@ public class ID3 {
 		sons = new HashMap<String, ID3>();
 	}
 
-	/**
-	 * 
-	 * @param instances
-	 *            exemples
-	 * @param instanceClass
-	 *            attributCible
-	 * @param attributes
-	 *            attributsNonCibles
-	 */
-	public ID3 recursive(Instances instances, InstanceClass instanceClass, ArrayList<Integer> attributes) {
+	public ID3 compute(Instances instances) {
+		ArrayList<Integer> attributes = new ArrayList<Integer>();
+		for (int i = 0; i < instances.getAttributes().size() - 1; i++) {
+			attributes.add(i);
+		}
+		System.out.println(attributes.toString());
+		return recursive(instances, attributes);
+	}
+	
+	public ID3 recursive(Instances instances, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			ID3 newId3 = new ID3();
 			Attribute attTemp = new Attribute(ERROR, INIT, ERROR_I);
@@ -86,7 +86,7 @@ public class ID3 {
 				// exemplesFiltrés = filtreExemplesAyantValeurPourAttribut(exemples, attributSélectionné, valeur)
 		        // nouveauNœud->fils(valeur) = ID3(exemplesFiltrés, attributCible, attributsNonCiblesRestants)
 				for (String s : instances.getAttributes().get(attTemp.getName())) {
-					newId3.addSon(s, recursive(filterInstance(instances, attTemp, s), new InstanceClass("yes"), remainingAttributes));
+					newId3.addSon(s, recursive(filterInstance(instances, attTemp, s), remainingAttributes));
 				}
 				
 				return newId3;
@@ -215,19 +215,19 @@ public class ID3 {
 	public void display(int inc) {
 		if (!LEAF.equals(attribute.getName())) {
 			for (int i = 0; i < inc; i++) {
-				System.out.print("\t");
+				System.out.print(" | ");
 			}
 			System.out.print("Attribut" + inc + " = " + attribute.getName() + "\n");
 		} else {
 			for (int i = 0; i < inc; i++) {
-				System.out.print("\t");
+				System.out.print(" | ");
 			}
 			System.out.print("ValeurDeClasse" + inc + " = " + attribute.getValue() + "\n");
 		}
 		if (sons.size() > 0) {
 			for (Entry<String, ID3> entry : sons.entrySet()) {
 				for (int i = 0; i < inc; i++) {
-					System.out.print("\t");
+					System.out.print(" | ");
 				}
 				System.out.print("Fils - " + entry.getKey() + "\n");
 				entry.getValue().display(inc + 1);
