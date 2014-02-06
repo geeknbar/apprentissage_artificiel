@@ -20,6 +20,11 @@ public class ID3 {
 		sons = new HashMap<String, ID3>();
 	}
 
+	/**
+	 * Fonction permettant d'initialiser la fonction récursive.
+	 * @param instances Instances sur laquelle s'effectue le traitement.
+	 * @return Retourne une instance de la classe ID3 contenant l'arbre de décision.
+	 */
 	public ID3 compute(Instances instances) {
 		ArrayList<Integer> attributes = new ArrayList<Integer>();
 		for (int i = 0; i < instances.getAttributes().size() - 1; i++) {
@@ -28,14 +33,21 @@ public class ID3 {
 		return recursive(instances, attributes);
 	}
 	
+	/**
+	 * Fonction récursive principale permettant la construction de l'arbre de décision.
+	 * @param instances Instances sur laquelle s'effectue le traitement.
+	 * @param attributes Liste des index des attributs non traités.
+	 * @return Retourne un noeud (une instance de la classe ID3).
+	 */
 	public ID3 recursive(Instances instances, ArrayList<Integer> attributes) {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
+			/* Retourner un noeuf erreur */
 			ID3 newId3 = new ID3();
 			Attribute attTemp = new Attribute(ERROR, INIT, ERROR_I);
 			newId3.setAttribute(attTemp);
 			return newId3;
 		} else if (attributes.size() == 0) { /* Nœud terminal */
-			// retourner un nœud ayant la valeur la plus représentée pour attributCible
+			/* Retourner un nœud ayant la valeur de classe la plus représentée */
 			HashMap<String, Integer> nbInstanceClass = new HashMap<String, Integer>();
 			for (Instance instance : instances.getInstances()) {
 				if (!nbInstanceClass.containsKey(instance.getInstanceClass().getValue())) {
@@ -63,36 +75,43 @@ public class ID3 {
 			for (Instance instance : instances.getInstances()) {	
 				instanceClassValues.add(instance.getInstanceClass().getValue());
 			}
-			if (instanceClassValues.size() == 1) {
-				// retourner un noeud ayant cette valeur
+			if (instanceClassValues.size() == 1) { /* Une seule valeur de classe représentée */
+				/* Retourner un noeud ayant cette valeur */
 				ID3 newId3 = new ID3();
 				Attribute attTemp = new Attribute(LEAF, instanceClassValues.toArray()[0].toString(), LEAF_I);
 				newId3.setAttribute(attTemp);
 				return newId3;
-			} else {
-				// attributSélectionné = attribut maximisant le gain d'information parmi attributsNonCibles
-				Attribute attTemp = bestAttribute(instances, attributes);
-				// attributsNonCiblesRestants = suppressionListe(attributsNonCibles, attributSélectionné)
+			} else { /* Plusieurs valeurs de classe représentées */
+				/* selectedAttribute = attribut maximisant le gain d'information parmi les attributs restants */
+				Attribute selectedAttribute = bestAttribute(instances, attributes);
+				/* remainingAttributes = attributes - {selectedAttribute} */
 				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
 				int i = 0;
-				while (attributes.get(i) != attTemp.getIndex()) {
+				while (attributes.get(i) != selectedAttribute.getIndex()) {
 					i++;
 				}
 				remainingAttributes.remove(i);
-				// nouveauNœud = nœud étiqueté avec attributSélectionné
+				/* newId3 = nœud étiqueté avec selectedAttribute */
 				ID3 newId3 = new ID3();
-				newId3.setAttribute(attTemp);
-				// exemplesFiltrés = filtreExemplesAyantValeurPourAttribut(exemples, attributSélectionné, valeur)
-		        // nouveauNœud->fils(valeur) = ID3(exemplesFiltrés, attributCible, attributsNonCiblesRestants)
-				for (String s : instances.getAttributes().get(attTemp.getName())) {
-					newId3.addSon(s, recursive(filterInstance(instances, attTemp, s), remainingAttributes));
+				newId3.setAttribute(selectedAttribute);
+				/* Création d'un fils pour chaque valeur possible de selectedAttribute */
+		        /* newId3->addSon(attributeValue, ID3(filterInstance, selectedAttribute, attributeValue), remainingAttributes) */
+				for (String attributeValue : instances.getAttributes().get(selectedAttribute.getName())) {
+					newId3.addSon(attributeValue, recursive(filterInstance(instances, selectedAttribute, attributeValue), remainingAttributes));
 				}
 				
+				/* Retourne le nouveau noeud */
 				return newId3;
 			}
 		}
 	}
 
+	/**
+	 * Fonction permettant de chercher le meilleur attribut (celui qui obtient le meilleur gain).
+	 * @param instances Instances sur laquelle s'effectue le traitement.
+	 * @param attributes Liste des index d'attribut non traités.
+	 * @return Retourne le meilleur attribut.
+	 */
 	public Attribute bestAttribute(Instances instances, ArrayList<Integer> attributes) {	
 		double topGain = 0;
 		Attribute topAttribute = null;
@@ -154,6 +173,13 @@ public class ID3 {
 		return topAttribute;
 	}
 	
+	/**
+	 * Fonction permettant de filtrer les exemples en fonction de la valeur d'un attribut.
+	 * @param instances Instances sur laquelle s'effectue le traitement.
+	 * @param attribute Attribut qui doit-être filtré.
+	 * @param value Valeur de l'attribut qui doit-être conservée.
+	 * @return Retourne une nouvelle instances.
+	 */
 	public Instances filterInstance(Instances instances, Attribute attribute, String value) {
 		Instances newInstances = new Instances();
 		newInstances.setRelationName(instances.getRelationName());
@@ -174,11 +200,17 @@ public class ID3 {
 		return newInstances;
 	}
 
+	/**
+	 * Fonction permettant de calculer l'entropie.
+	 * @param nbExamples Entier correspondant au nombre d'exemples.
+	 * @param values Liste des entiers à traiter.
+	 * @return Retourne la valeur de l'entropie.
+	 */
 	private double calculateEntropy(int nbExamples, ArrayList<Integer> values) {
 		double entropy = 0;
 		for (Integer value : values) {
-			double tmp = (double) value / (double) nbExamples;
-			entropy += -(tmp * log2(tmp));
+			double entropyPart = (double) value / (double) nbExamples;
+			entropy += -(entropyPart * log2(entropyPart));
 		}
 		return entropy;
 	}
@@ -211,27 +243,11 @@ public class ID3 {
 		sons.put(value, id3);
 	}
 	
-	/*public void display(int inc) {
-		if (sons.size() > 0) {
-			for (Entry<String, ID3> entry : sons.entrySet()) {
-				for (int i = 0; i < inc; i++) {
-					System.out.print("| ");
-				}
-				System.out.print(attribute.getName() + " = " + entry.getKey());
-				if (!LEAF.equals(entry.getValue().getAttribute().getName())) {
-					System.out.print("\n");
-					entry.getValue().display(inc + 1);
-				} else {
-					entry.getValue().display(inc + 1);
-					System.out.print("\n");
-				}
-			}
-		}
-		if (LEAF.equals(attribute.getName())) {
-			System.out.print(": " + attribute.getValue());
-		}
-	}*/
-	
+	/**
+	 * Méthode permettant d'afficher l'arbre de décision.
+	 * @param inc Entier représentant le niveau d'imbrication.
+	 * @return Retourne l'arbre de décision sous forme de chaîne de caractères.
+	 */
 	public String display(int inc) {
 		
 		String display = INIT;

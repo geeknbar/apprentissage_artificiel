@@ -76,7 +76,6 @@ public class Reader {
 						}	
 					}
 				}
-
 			}
 			br.close();
 		} catch (Exception e) {
