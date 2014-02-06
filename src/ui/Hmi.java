@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -133,6 +134,7 @@ public class Hmi extends JFrame {
 		panelCenter.setLayout(new BorderLayout(0, 0));
 
 		taOutput = new JTextArea();
+		taOutput.setMargin(new Insets(10,10,10,10));
 		JScrollPane scroll = new JScrollPane(taOutput);
 		panelCenter.add(scroll);
 
