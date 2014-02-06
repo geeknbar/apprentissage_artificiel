@@ -34,6 +34,9 @@ public class Reader {
 			
 			while ((line = br.readLine()) != null) {
 				if (!line.isEmpty()) {
+					line = line.trim();
+					line = line.replaceAll("\\s", " ");
+					line = line.replaceAll("\t", " ");
 					String lineSplit[] = line.split(" ", 3);
 					if (lineSplit[0].equals(COMMENT)) {
 						if (lineSplit[0].equals(RELATION)) {
