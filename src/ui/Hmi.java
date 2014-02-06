@@ -204,6 +204,7 @@ public class Hmi extends JFrame {
 		panelCenter.setLayout(new BorderLayout(0, 0));
 
 		taOutput = new JTextArea();
+		taOutput.setEditable(false);
 		taOutput.setMargin(new Insets(10,10,10,10));
 		JScrollPane scroll = new JScrollPane(taOutput);
 		panelCenter.add(scroll);
