@@ -43,7 +43,7 @@ public class ID3 {
 		if (instances.getInstances().size() == 0) { /* Nœud terminal */
 			/* Retourner un noeuf erreur */
 			ID3 newId3 = new ID3();
-			Attribute attTemp = new Attribute(ERROR, INIT, ERROR_I);
+			Attribute attTemp = new Attribute(ERROR, INIT, ERROR_I, 0);
 			newId3.setAttribute(attTemp);
 			return newId3;
 		} else if (attributes.size() == 0) { /* Nœud terminal */
@@ -67,7 +67,7 @@ public class ID3 {
 				}
 			}
 			ID3 newId3 = new ID3();
-			Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I);
+			Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I, 0);
 			newId3.setAttribute(attTemp);
 			return newId3;
 		} else {
@@ -84,12 +84,12 @@ public class ID3 {
 			if (instanceClassValues.size() == 1) { /* Une seule valeur de classe représentée */
 				/* Retourner un noeud ayant cette valeur */
 				ID3 newId3 = new ID3();
-				Attribute attTemp = new Attribute(LEAF, instanceClassValues.keySet().toArray()[0].toString(), LEAF_I);
+				Attribute attTemp = new Attribute(LEAF, instanceClassValues.keySet().toArray()[0].toString(), LEAF_I, 0);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else { /* Plusieurs valeurs de classe représentées */
 				
-				if (depth == maxDepth && depth != 0) {
+				if (depth == maxDepth && depth > 0) { /* Si la profondeur maximale est atteinte */
 					String topClass = INIT;
 					int nbTopClass = INIT_I;
 					for (Entry<String, Integer> entry : instanceClassValues.entrySet()) {
@@ -99,31 +99,55 @@ public class ID3 {
 						}
 					}
 					ID3 newId3 = new ID3();
-					Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I);
+					Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I, 0);
 					newId3.setAttribute(attTemp);
 					return newId3;
+				} else {
+					
+					/* On teste si une valeur de classe représente plus du taux admissible d'exemples */
+					if (errorRate > 0 && depth > 0) {
+						String topClass = INIT;
+						int nbErrorExample = INIT_I;
+						int nbInstance = INIT_I;
+						for (Entry<String, Integer> entry : instanceClassValues.entrySet()) {
+							nbInstance += entry.getValue();
+						}
+						for (Entry<String, Integer> entry : instanceClassValues.entrySet()) {
+							double rate = ((double)entry.getValue() / (double)nbInstance) * 100;
+							if (rate >= errorRate) {
+								topClass = entry.getKey();
+								nbErrorExample = nbInstance - entry.getValue();
+							}
+						}
+						if (!INIT.equals(topClass)) { /* Une valeur satisfait la condition */
+							ID3 newId3 = new ID3();
+							Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I, nbErrorExample);
+							newId3.setAttribute(attTemp);
+							return newId3;
+						}	
+					}
+					
+					/* selectedAttribute = attribut maximisant le gain d'information parmi les attributs restants */
+					Attribute selectedAttribute = bestAttribute(instances, attributes);
+					/* remainingAttributes = attributes - {selectedAttribute} */
+					ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
+					int i = 0;
+					while (attributes.get(i) != selectedAttribute.getIndex()) {
+						i++;
+					}
+					remainingAttributes.remove(i);
+					/* newId3 = nœud étiqueté avec selectedAttribute */
+					ID3 newId3 = new ID3();
+					newId3.setAttribute(selectedAttribute);
+					/* Création d'un fils pour chaque valeur possible de selectedAttribute */
+			        /* newId3->addSon(attributeValue, ID3(filterInstance, selectedAttribute, attributeValue), remainingAttributes) */
+					for (String attributeValue : instances.getAttributes().get(selectedAttribute.getName())) {
+						newId3.addSon(attributeValue, recursive(filterInstance(instances, selectedAttribute, attributeValue), remainingAttributes, depth + 1, maxDepth, errorRate));
+					}
+					
+					/* Retourne le nouveau noeud */
+					return newId3;	
 				}
-				
-				/* selectedAttribute = attribut maximisant le gain d'information parmi les attributs restants */
-				Attribute selectedAttribute = bestAttribute(instances, attributes);
-				/* remainingAttributes = attributes - {selectedAttribute} */
-				ArrayList<Integer> remainingAttributes = new ArrayList<Integer>(attributes);
-				int i = 0;
-				while (attributes.get(i) != selectedAttribute.getIndex()) {
-					i++;
-				}
-				remainingAttributes.remove(i);
-				/* newId3 = nœud étiqueté avec selectedAttribute */
-				ID3 newId3 = new ID3();
-				newId3.setAttribute(selectedAttribute);
-				/* Création d'un fils pour chaque valeur possible de selectedAttribute */
-		        /* newId3->addSon(attributeValue, ID3(filterInstance, selectedAttribute, attributeValue), remainingAttributes) */
-				for (String attributeValue : instances.getAttributes().get(selectedAttribute.getName())) {
-					newId3.addSon(attributeValue, recursive(filterInstance(instances, selectedAttribute, attributeValue), remainingAttributes, depth + 1, maxDepth, errorRate));
-				}
-				
-				/* Retourne le nouveau noeud */
-				return newId3;
 			}
 		}
 	}
@@ -211,7 +235,7 @@ public class ID3 {
 			if (instances.getInstances().get(i).getAttributes().get(attribute.getIndex()).getValue().equals(value)) {
 				Instance newInstance = new Instance();
 				for (Attribute att : instances.getInstances().get(i).getAttributes()) {
-					newInstance.addAttribute(new Attribute(att.getName(), att.getValue(), att.getIndex()));
+					newInstance.addAttribute(new Attribute(att.getName(), att.getValue(), att.getIndex(), 0));
 				}
 				InstanceClass newInstanceClass = new InstanceClass(instances.getInstances().get(i).getInstanceClass().getValue());
 				newInstance.setInstanceClass(newInstanceClass);
@@ -290,7 +314,12 @@ public class ID3 {
 			}
 		}
 		if (LEAF.equals(attribute.getName())) {
-			display += ": " + attribute.getValue();
+			if (attribute.getNbErrors() > 0) {
+				display += ": " + attribute.getValue() + " (" + attribute.getNbErrors() + " errors)";
+			} else {
+				display += ": " + attribute.getValue();
+			}
+			
 		}
 		
 		return display;
