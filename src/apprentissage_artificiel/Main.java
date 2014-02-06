@@ -5,7 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 //		String filePath = "./bin/doc/weather.nominal.arff";
 		//String filePath = "./bin/doc/mika.nominal.arff";
-		String filePath = "./bin/doc/tic-tac-toe.arff";
+//		String filePath = "./bin/doc/tic-tac-toe.arff";
+		String filePath = "./bin/doc/contact-lenses.arff";
 		Instances instances = new Instances();
 		instances.loadFile(filePath);
 		ID3 id3 = new ID3();
