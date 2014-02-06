@@ -83,7 +83,8 @@ public class ID3 {
 			if (instanceClassValues.size() == 1) { /* Une seule valeur de classe représentée */
 				/* Retourner un noeud ayant cette valeur */
 				ID3 newId3 = new ID3();
-				Attribute attTemp = new Attribute(LEAF, instanceClassValues.entrySet().toArray()[0].toString(), LEAF_I);
+				System.out.println(instanceClassValues.keySet().toArray()[0].toString());
+				Attribute attTemp = new Attribute(LEAF, instanceClassValues.keySet().toArray()[0].toString(), LEAF_I);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else { /* Plusieurs valeurs de classe représentées */
