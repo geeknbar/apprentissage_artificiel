@@ -6,7 +6,10 @@ public class Main {
 //		String filePath = "./bin/doc/weather.nominal.arff";
 		//String filePath = "./bin/doc/mika.nominal.arff";
 //		String filePath = "./bin/doc/tic-tac-toe.arff";
-		String filePath = "./bin/doc/contact-lenses.arff";
+//		String filePath = "./bin/doc/contact-lenses.arff";
+//		String filePath = "./bin/doc/cars.arff";
+//		String filePath = "./bin/doc/prime.arff";
+		String filePath = "./bin/doc/agaricus-lepiota.arff";
 		Instances instances = new Instances();
 		instances.loadFile(filePath);
 		ID3 id3 = new ID3();
