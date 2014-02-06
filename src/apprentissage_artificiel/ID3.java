@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 public class ID3 {	 
 
 	public final static String INIT = "";
+	public final static int INIT_I = 0;
 	public final static String LEAF = "LEAF";
 	public final static int LEAF_I = -1;
 	public final static String ERROR = "ERROR";
@@ -24,12 +25,12 @@ public class ID3 {
 	 * @param instances Instances sur laquelle s'effectue le traitement.
 	 * @return Retourne une instance de la classe ID3 contenant l'arbre de décision.
 	 */
-	public ID3 compute(Instances instances) {
+	public ID3 compute(Instances instances, int maxDepth, int errorRate) {
 		ArrayList<Integer> attributes = new ArrayList<Integer>();
 		for (int i = 0; i < instances.getAttributes().size() - 1; i++) {
 			attributes.add(i);
 		}
-		return recursive(instances, attributes, 0, 0, 0);
+		return recursive(instances, attributes, 0, maxDepth, errorRate);
 	}
 	
 	/**
@@ -58,7 +59,7 @@ public class ID3 {
 				}
 			}
 			String topClass = INIT;
-			int nbTopClass = 0;
+			int nbTopClass = INIT_I;
 			for (Entry<String, Integer> entry : nbInstanceClass.entrySet()) {
 				if (entry.getValue() > nbTopClass) {
 					topClass = entry.getKey();
@@ -83,15 +84,24 @@ public class ID3 {
 			if (instanceClassValues.size() == 1) { /* Une seule valeur de classe représentée */
 				/* Retourner un noeud ayant cette valeur */
 				ID3 newId3 = new ID3();
-				System.out.println(instanceClassValues.keySet().toArray()[0].toString());
 				Attribute attTemp = new Attribute(LEAF, instanceClassValues.keySet().toArray()[0].toString(), LEAF_I);
 				newId3.setAttribute(attTemp);
 				return newId3;
 			} else { /* Plusieurs valeurs de classe représentées */
 				
-				if (depth == maxDepth) {
-					//ID3 newIDId3 = new ID3();
-					
+				if (depth == maxDepth && depth != 0) {
+					String topClass = INIT;
+					int nbTopClass = INIT_I;
+					for (Entry<String, Integer> entry : instanceClassValues.entrySet()) {
+						if (entry.getValue() > nbTopClass) {
+							topClass = entry.getKey();
+							nbTopClass = entry.getValue();
+						}
+					}
+					ID3 newId3 = new ID3();
+					Attribute attTemp = new Attribute(LEAF, topClass, LEAF_I);
+					newId3.setAttribute(attTemp);
+					return newId3;
 				}
 				
 				/* selectedAttribute = attribut maximisant le gain d'information parmi les attributs restants */

@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 
@@ -46,8 +45,8 @@ public class Hmi extends JFrame {
 	private final JFileChooser fc = new JFileChooser(new File("./bin/doc/"));
 	private Instances instances;
 	private ID3 id3;
-	private JTextField textFieldRate;
-	private JTextField textFieldDeap;
+	private JTextField tfRate;
+	private JTextField tfDepth;
 
 	/**
 	 * Launch the application.
@@ -139,10 +138,10 @@ public class Hmi extends JFrame {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		horizontalBoxRate.add(horizontalStrut_2);
 
-		textFieldRate = new JTextField();
-		textFieldRate.setColumns(10);
-		textFieldRate.setMaximumSize(textFieldRate.getPreferredSize());
-		horizontalBoxRate.add(textFieldRate);
+		tfRate = new JTextField();
+		tfRate.setColumns(10);
+		tfRate.setMaximumSize(tfRate.getPreferredSize());
+		horizontalBoxRate.add(tfRate);
 
 		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
 		horizontalBoxRate.add(horizontalStrut_5);
@@ -153,16 +152,16 @@ public class Hmi extends JFrame {
 		Box horizontalBoxDeap = Box.createHorizontalBox();
 		verticalBox.add(horizontalBoxDeap);
 
-		JLabel lblDeap = new JLabel("Deap");
-		horizontalBoxDeap.add(lblDeap);
+		JLabel lblDepth = new JLabel("Depth");
+		horizontalBoxDeap.add(lblDepth);
 
 		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
 		horizontalBoxDeap.add(horizontalStrut_3);
 
-		textFieldDeap = new JTextField();
-		textFieldDeap.setColumns(10);
-		textFieldDeap.setMaximumSize(textFieldDeap.getPreferredSize());
-		horizontalBoxDeap.add(textFieldDeap);
+		tfDepth = new JTextField();
+		tfDepth.setColumns(10);
+		tfDepth.setMaximumSize(tfDepth.getPreferredSize());
+		horizontalBoxDeap.add(tfDepth);
 
 		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
 		horizontalBoxDeap.add(horizontalStrut_4);
@@ -178,7 +177,15 @@ public class Hmi extends JFrame {
 		btnCompute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id3 = new ID3();
-				ID3 id3Return = id3.compute(instances);
+				int maxDepth = 0;
+				int errorRate = 0;
+				if (!"".equals(tfDepth.getText())) {
+					maxDepth = Integer.valueOf(tfDepth.getText());
+				}
+				if (!"".equals(tfRate.getText())) {
+					errorRate = Integer.valueOf(tfRate.getText());
+				}
+				ID3 id3Return = id3.compute(instances, maxDepth, errorRate);
 				taOutput.setText("Relation:\t" + instances.getRelationName() + "\n");
 				taOutput.append("Instances:\t" + instances.getInstances().size() + "\n");
 				taOutput.append("Attributes:\t" + instances.getAttributes().size() + "\n");
